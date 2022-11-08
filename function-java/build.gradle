@@ -1,0 +1,23 @@
+plugins {
+    id("com.micronauttodo.build.internal.base-module")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.minimal.application") version "3.6.3"
+}
+dependencies {
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation(project(":dev-security"))
+    implementation(project(":code"))
+}
+
+application {
+    mainClass.set("com.example.Application")
+}
+micronaut {
+    runtime("lambda_java")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.example.*")
+    }
+}
