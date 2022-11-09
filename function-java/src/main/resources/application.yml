@@ -4,4 +4,4 @@ micronaut:
 ---
 micronaut:
   server:
-    context-path: 'prod'
+    context-path: '/prod'
