@@ -1,13 +1,16 @@
 plugins {
-    id("com.micronauttodo.build.internal.base-module")
+    id("com.micronauttodo.build.internal.test-module")
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.minimal.application") version "3.6.3"
+    id("io.micronaut.application") version "3.6.3"
 }
+
+version = "0.1"
+
 dependencies {
-    implementation("jakarta.annotation:jakarta.annotation-api")
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation(project(":dev-security"))
     implementation(project(":code"))
+    testImplementation(project(":dev-localstack"))
 }
 
 application {

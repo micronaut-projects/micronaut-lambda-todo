@@ -17,6 +17,7 @@ dependencies {
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    implementation(project(":repositories-dynamodb-constants"))
 }
 application {
     mainClass.set("com.example.Main")

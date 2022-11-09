@@ -10,8 +10,8 @@ class AppStackTest {
 
     @Test
     void testAppStack() {
-        if (new File(AppStack.functionPath()).exists()) {
-            AppStack stack = new AppStack(new App(), "TestMicronautAppStack");
+        if (new File(AppStack.functionPath("function-java", false)).exists()) {
+            AppStack stack = new AppStack(new App(), "TestMnTodoStack");
             Template template = Template.fromStack(stack);
             template.hasResourceProperties("AWS::Lambda::Function", Collections.singletonMap("Handler", "io.micronaut.function.aws.proxy.MicronautLambdaHandler"));
         }

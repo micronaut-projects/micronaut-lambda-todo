@@ -12,6 +12,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.context.ServerContextPathProvider;
 import io.micronaut.http.server.util.HttpHostResolver;
 import io.micronaut.http.uri.UriBuilder;
 import io.micronaut.scheduling.TaskExecutors;
@@ -27,8 +28,10 @@ import javax.validation.constraints.NotBlank;
 class TodoDeleteController extends AbstractController {
     private final TodoDeleteService todoDeleteService;
 
-    TodoDeleteController(HttpHostResolver httpHostResolver, TodoDeleteService todoDeleteService) {
-        super(httpHostResolver);
+    TodoDeleteController(HttpHostResolver httpHostResolver,
+                         TodoDeleteService todoDeleteService,
+                         ServerContextPathProvider serverContextPathProvider) {
+        super(httpHostResolver, serverContextPathProvider);
         this.todoDeleteService = todoDeleteService;
     }
 

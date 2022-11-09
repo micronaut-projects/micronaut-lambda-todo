@@ -13,6 +13,7 @@ import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.context.ServerContextPathProvider;
 import io.micronaut.http.server.util.HttpHostResolver;
 import io.micronaut.http.uri.UriBuilder;
 import io.micronaut.scheduling.TaskExecutors;
@@ -28,8 +29,9 @@ import javax.validation.constraints.NotBlank;
 public class TodoSaveController extends AbstractController {
     private final TodoSaveService todoSaveService;
 
-    public TodoSaveController(HttpHostResolver httpHostResolver, TodoSaveService todoSaveService) {
-        super(httpHostResolver);
+    public TodoSaveController(HttpHostResolver httpHostResolver, TodoSaveService todoSaveService,
+                              ServerContextPathProvider serverContextPathProvider) {
+        super(httpHostResolver, serverContextPathProvider);
         this.todoSaveService = todoSaveService;
     }
 

@@ -1,0 +1,18 @@
+plugins {
+    id("com.micronauttodo.build.internal.base-module")
+}
+dependencies {
+    testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers")
+    testRuntimeOnly("ch.qos.logback:logback-classic")
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
+}
