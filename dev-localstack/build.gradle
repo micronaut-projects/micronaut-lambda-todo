@@ -1,7 +1,0 @@
-plugins {
-    id 'com.micronauttodo.build.internal.lib-module'
-}
-dependencies {
-    implementation(project(":repositories-dynamodb-constants"))
-    compileOnly("software.amazon.awssdk:dynamodb")
-}

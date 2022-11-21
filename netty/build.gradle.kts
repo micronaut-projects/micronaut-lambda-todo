@@ -1,21 +1,23 @@
 plugins {
-    id("com.micronauttodo.build.internal.test-module")
+    id("com.micronauttodo.build.internal.base-module")
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.6.5"
 }
+
 version = "0.1"
+
 dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation(projects.devSecurity)
     implementation(projects.code)
-    testImplementation(projects.devLocalstack)
-    testImplementation("io.micronaut.security:micronaut-security-oauth2")
+    implementation(projects.devLocalstack)
 }
+
 application {
     mainClass.set("com.example.Application")
 }
 micronaut {
-    runtime("lambda_java")
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)

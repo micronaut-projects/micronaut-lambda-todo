@@ -1,0 +1,7 @@
+micronaut:
+  application:
+    name: mntodo
+---
+micronaut:
+  server:
+    context-path: '/prod'

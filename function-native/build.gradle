@@ -6,16 +6,16 @@ plugins {
 version = "0.1"
 dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
-    implementation(projects.devSecurity)
-    implementation(projects.code)
-    testImplementation(projects.devLocalstack)
+    implementation(project(":dev-security"))
+    implementation(project(":code"))
+    testImplementation(project(":dev-localstack"))
     testImplementation("io.micronaut.security:micronaut-security-oauth2")
 }
 application {
     mainClass.set("com.example.Application")
 }
 micronaut {
-    runtime("lambda_java")
+    runtime("lambda_provided")
     testRuntime("junit5")
     processing {
         incremental(true)
