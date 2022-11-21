@@ -1,11 +1,7 @@
 plugins {
-    id("com.micronauttodo.build.internal.test-module")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.6.5"
+    id("com.micronauttodo.build.internal.lambda-java")
 }
-version = "0.1"
 dependencies {
-    runtimeOnly("ch.qos.logback:logback-classic")
     implementation(projects.devSecurity)
     implementation(projects.code)
     testImplementation(projects.devLocalstack)
@@ -13,12 +9,4 @@ dependencies {
 }
 application {
     mainClass.set("com.example.Application")
-}
-micronaut {
-    runtime("lambda_java")
-    testRuntime("junit5")
-    processing {
-        incremental(true)
-        annotations("com.example.*")
-    }
 }

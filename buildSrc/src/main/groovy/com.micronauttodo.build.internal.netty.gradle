@@ -1,0 +1,17 @@
+plugins {
+    id("com.micronauttodo.build.internal.base-module")
+    id("com.github.johnrengelman.shadow")
+    id("io.micronaut.application")
+}
+version = "0.1"
+dependencies {
+    runtimeOnly("ch.qos.logback:logback-classic")
+}
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.example.*")
+    }
+}
