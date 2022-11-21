@@ -1,13 +1,9 @@
-rootProject.name="micronaut-lambda-todo"
-
-include("infra")
-include("code")
-include("dev-localstack")
-include("dev-security")
-include("function-java")
-include("function-java-snapstart")
-include("function-native")
+rootProject.name = "micronaut-lambda-todo-app"
 include("netty")
+include("code")
+include("infra")
+include("dev-security")
+include("dev-localstack")
 include("repositories-dynamodb-constants")
-
+include("function-java")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

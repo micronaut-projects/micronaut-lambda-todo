@@ -3,13 +3,10 @@ plugins {
 }
 version = "0.1"
 dependencies {
-    implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
-    /*
-    implementation(projects.devSecurity)
-    implementation(projects.code)
-    implementation(projects.devLocalstack)
-     */
+  implementation(projects.code)
+  implementation(projects.devSecurity)
+  implementation(projects.devLocalstack)
 }
 application {
-    mainClass.set("com.example.Application")
+    mainClass.set("example.micronaut.Application")
 }

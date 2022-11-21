@@ -6,6 +6,7 @@ import com.micronauttodo.models.TodoCreate;
 import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.services.TodoDeleteService;
 import com.micronauttodo.services.TodoSaveService;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
@@ -38,6 +39,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+@Requires(beans = {TodoSaveService.class, TodoDeleteService.class, TodoRepository.class})
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @ExecuteOn(TaskExecutors.IO)
 @Controller(Api.PATH + "/todo")

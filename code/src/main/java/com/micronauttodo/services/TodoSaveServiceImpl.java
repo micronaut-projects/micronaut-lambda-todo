@@ -5,6 +5,7 @@ import com.micronauttodo.models.TodoCreate;
 import com.micronauttodo.models.Todo;
 import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.models.events.TodoSavedEvent;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.core.annotation.NonNull;
 import jakarta.inject.Singleton;
@@ -12,6 +13,7 @@ import jakarta.inject.Singleton;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+@Requires(beans = {TodoRepository.class})
 @Singleton
 public class TodoSaveServiceImpl implements TodoSaveService {
 

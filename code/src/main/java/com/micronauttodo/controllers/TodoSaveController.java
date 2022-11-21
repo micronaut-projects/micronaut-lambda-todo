@@ -3,8 +3,10 @@ package com.micronauttodo.controllers;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
 import com.micronauttodo.models.TodoCreate;
+import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.services.TodoSaveService;
 import com.micronauttodo.utils.TurboUtils;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -25,6 +27,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 
 import javax.validation.constraints.NotBlank;
 
+@Requires(beans = {TodoSaveService.class})
 @Controller
 public class TodoSaveController extends AbstractController {
     private final TodoSaveService todoSaveService;

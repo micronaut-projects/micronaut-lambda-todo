@@ -3,8 +3,8 @@ micronaut:
     name: mntodo
 ---
 dynamodb-local:
-  host: 'localhost'
-  port: '8000'
+  host: localhost
+  port: 8000
 dynamodb:
   table-name: todo
 micronaut:

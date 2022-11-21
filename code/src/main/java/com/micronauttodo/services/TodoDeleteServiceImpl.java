@@ -3,6 +3,7 @@ package com.micronauttodo.services;
 import com.micronauttodo.models.events.TodoDeletedEvent;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.repositories.TodoRepository;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.core.annotation.NonNull;
 import jakarta.inject.Singleton;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@Requires(beans = {TodoRepository.class})
 @Singleton
 public class TodoDeleteServiceImpl implements TodoDeleteService {
 

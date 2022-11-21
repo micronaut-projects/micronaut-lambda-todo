@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 
 @Controller
-public class HomeController extends AbstractController{
+public class HomeController extends AbstractController {
     public HomeController(HttpHostResolver httpHostResolver,
                           ServerContextPathProvider serverContextPathProvider) {
         super(httpHostResolver, serverContextPathProvider);

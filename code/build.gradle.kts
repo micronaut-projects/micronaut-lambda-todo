@@ -7,7 +7,6 @@ dependencies {
   annotationProcessor("io.micronaut.openapi:micronaut-openapi")
   annotationProcessor("io.micronaut.security:micronaut-security-annotations")
   annotationProcessor("io.micronaut:micronaut-http-validation")
-
   implementation("io.micronaut:micronaut-jackson-databind")
   implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
   implementation("software.amazon.awssdk:dynamodb") {
@@ -22,8 +21,8 @@ dependencies {
   implementation("io.micronaut.views:micronaut-views-thymeleaf")
   implementation("io.micronaut.security:micronaut-security-jwt")
   implementation("io.micronaut.security:micronaut-security-oauth2")
-
-  testImplementation(project(":dev-localstack"))
+  compileOnly("com.amazonaws.serverless:aws-serverless-java-container-core:1.9")
+  testImplementation(projects.devLocalstack)
   testImplementation("io.micronaut.aws:micronaut-function-aws-api-proxy")
 }
 tasks.withType<Test> {
@@ -32,4 +31,7 @@ tasks.withType<Test> {
 java {
   sourceCompatibility = JavaVersion.toVersion("11")
   targetCompatibility = JavaVersion.toVersion("11")
+}
+repositories {
+  mavenCentral()
 }

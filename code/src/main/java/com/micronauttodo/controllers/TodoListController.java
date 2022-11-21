@@ -2,7 +2,9 @@ package com.micronauttodo.controllers;
 
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.repositories.TodoRepository;
+import com.micronauttodo.services.TodoDeleteService;
 import com.micronauttodo.views.TodoModel;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -19,6 +21,7 @@ import io.micronaut.security.token.reader.TokenResolver;
 import io.micronaut.views.View;
 import io.swagger.v3.oas.annotations.Hidden;
 
+@Requires(beans = {TodoRepository.class})
 @Controller
 class TodoListController {
     private final HttpHostResolver httpHostResolver;
