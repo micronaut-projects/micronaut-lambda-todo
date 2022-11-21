@@ -46,15 +46,40 @@ public class AppStack extends Stack {
 
     public AppStack(final Construct parent, final String id, final StackProps props) {
         super(parent, id, props);
-        Table table = createTable("mntodo-java-table");
-        Map<String, String> env = environmentVariables(table);
-        Function javaFunction = createAppFunction("function-java", "mntodo-java-function", env, false).build();
-        table.grantReadWriteData(javaFunction);
-        LambdaRestApi javaFunctionApi = createRestApi("mntodo-java-api", javaFunction);
+        createGatewayLambdaTable("function-java",
+                "mntodo-java-table",
+                "mntodo-java-function",
+                "mntodo-java-api",
+                "JavaApiUrl",
+                Runtime.JAVA);
+        createGatewayLambdaTable("function-native",
+                "mntodo-native-table",
+                "mntodo-native-function",
+                "mntodo-native-api",
+                "NativeApiUrl",
+                Runtime.GRAALVM);
+        createGatewayLambdaTable("function-java-snapstart",
+                "mntodo-snapstart-table",
+                "mntodo-snapstart-function",
+                "mntodo-snapstart-api",
+                "SnapStartApiUrl",
+                Runtime.JAVA_SNAP_START);
+    }
 
-        CfnOutput.Builder.create(this, "JavaApiUrl")
-                .exportName("JavaApiUrl")
-                .value(javaFunctionApi.getUrl())
+    void createGatewayLambdaTable(String moduleName,
+                                  String tableName,
+                                  String functionId,
+                                  String apiId,
+                                  String outputId,
+                                  Runtime runtime){
+        Table table = createTable(tableName);
+        Map<String, String> env = environmentVariables(table);
+        Function function = createAppFunction(moduleName, functionId, env, runtime).build();
+        table.grantReadWriteData(function);
+        LambdaRestApi api = createRestApi(apiId, function);
+        CfnOutput.Builder.create(this, outputId)
+                .exportName(outputId)
+                .value(api.getUrl())
                 .build();
     }
 
@@ -78,8 +103,8 @@ public class AppStack extends Stack {
     private Function.Builder createAppFunction(String moduleName,
                                                String id,
                                                Map<String, String> environmentVariables,
-                                               boolean graalvm) {
-        return createFunction(moduleName, id, environmentVariables, ApplicationType.DEFAULT, null, graalvm);
+                                               Runtime runtime) {
+        return createFunction(moduleName, id, environmentVariables, ApplicationType.DEFAULT, null, runtime);
     }
 
     private Function.Builder createFunction(String moduleName,
@@ -87,29 +112,31 @@ public class AppStack extends Stack {
                                             Map<String, String> environmentVariables,
                                             ApplicationType applicationType,
                                             String handler,
-                                            boolean graalvm) {
+                                            Runtime runtime) {
         Function.Builder builder =  MicronautFunction.create(applicationType,
-                graalvm,
+                        runtime == Runtime.GRAALVM,
                 this,
                 id)
                 .environment(environmentVariables)
-                .code(Code.fromAsset(functionPath(moduleName, graalvm)))
+                .code(Code.fromAsset(functionPath(moduleName, runtime)))
                 .timeout(Duration.seconds(TIMEOUT))
                 .memorySize(MEMORY_SIZE)
                 .tracing(Tracing.ACTIVE)
                 .architecture(Architecture.X86_64)
                 .logRetention(RetentionDays.FIVE_DAYS);
+        if (runtime == Runtime.JAVA_SNAP_START) {
+            //builder = builder.snapstart(SnapStart.PUBLISHED_VERSIONS);
+        }
         return (handler != null) ? builder.handler(handler) : builder;
     }
 
-
-    public static String functionPath(String moduleName, boolean graalvm) {
-        return "../" + moduleName + "/build/libs/" + functionFilename(moduleName, graalvm);
+    public static String functionPath(String moduleName, Runtime runtime) {
+        return "../" + moduleName + "/build/libs/" + functionFilename(moduleName, runtime);
     }
 
-    public static String functionFilename(String moduleName, boolean graalvm) {
+    public static String functionFilename(String moduleName, Runtime runtime) {
         return MicronautFunctionFile.builder()
-                .graalVMNative(graalvm)
+                .graalVMNative(runtime == Runtime.GRAALVM)
                 .version("0.1")
                 .archiveBaseName(moduleName)
                 .buildTool(BuildTool.GRADLE)

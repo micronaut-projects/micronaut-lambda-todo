@@ -7,6 +7,3 @@ dynamodb-local:
   port: 8000
 dynamodb:
   table-name: todo
-micronaut:
-  server:
-    context-path: '/prod'

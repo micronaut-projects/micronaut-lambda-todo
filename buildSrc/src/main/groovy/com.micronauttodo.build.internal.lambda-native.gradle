@@ -1,7 +1,7 @@
 plugins {
     id("com.micronauttodo.build.internal.base-module")
     id("com.github.johnrengelman.shadow")
-    id("io.micronaut.minimal.application")
+    id("io.micronaut.application")
 }
 version = "0.1"
 dependencies {
@@ -9,7 +9,7 @@ dependencies {
     compileOnly("com.google.code.findbugs:jsr305")
 }
 micronaut {
-    runtime("lambda_java")
+    runtime("lambda_provided")
     testRuntime("junit5")
     processing {
         incremental(true)
