@@ -40,7 +40,7 @@ To ease deployment, the project contains a bash script. You can deploy via:
 ./deploy.sh
 ```
 
-The bash script builds the FAT JARs and the native image and runs `cdk deploy`. It uses AWS CloudFormation to deploy the resources to your account.
+The bash script builds the FAT JARs and the native executable with GraalVM, and runs `cdk deploy`. It uses AWS CloudFormation to deploy the resources to your account.
 
 CDK creates three outputs with the API Gateway endpoint URLs to use in our load tests.
 
@@ -85,6 +85,8 @@ filter @type="REPORT"
 ## AWS X-Ray Tracing
 
 The application gets additional detail to the X-Ray tracing by adding a TracingInterceptor to your AWS SDK clients. See `TracingInterceptorDynamoDbClientBuilderListener`. 
+
+### Traces for Native Executable built with GraalVM deployed to a custom runtime
 
 Example cold start trace
 
