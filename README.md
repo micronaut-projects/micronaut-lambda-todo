@@ -82,3 +82,11 @@ filter @type="REPORT"
 
 ![CloudWatch Logs Insights results for Native Executable build with GraalVM in AWS Lambda Custom runtime](cloudwatch-log-insights-native.png)
 
+
+## Destroy
+
+To destroy the CDK stack run: 
+
+```bash
+./destroy.sh
+```

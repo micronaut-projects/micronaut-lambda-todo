@@ -30,7 +30,12 @@ public class DevAuthenticationFetcher implements AuthenticationFetcher {
 
     @Override
     public Publisher<Authentication> fetchAuthentication(HttpRequest<?> request) {
-        return Publishers.just(new Authentication() {
+        return Publishers.just(authentication());
+    }
+
+    @NonNull
+    public Authentication authentication() {
+        return new Authentication() {
             @Override
             @NonNull
             public Map<String, Object> getAttributes() {
@@ -40,7 +45,7 @@ public class DevAuthenticationFetcher implements AuthenticationFetcher {
             public String getName() {
                 return ID;
             }
-        });
+        };
     }
 
     public Map<String, Object> claims() {
