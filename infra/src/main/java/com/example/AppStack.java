@@ -121,7 +121,7 @@ public class AppStack extends Stack {
                 .code(Code.fromAsset(functionPath(moduleName, runtime)))
                 .timeout(Duration.seconds(TIMEOUT))
                 .memorySize(MEMORY_SIZE)
-                .tracing(Tracing.ACTIVE)
+                .tracing(Tracing.DISABLED)
                 .architecture(Architecture.X86_64)
                 .logRetention(RetentionDays.FIVE_DAYS);
 

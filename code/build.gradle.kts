@@ -23,7 +23,7 @@ dependencies {
   implementation("io.micronaut.security:micronaut-security-oauth2")
 
   implementation(platform("com.amazonaws:aws-xray-recorder-sdk-bom:2.13.0"))
-  implementation("com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2")
+  compileOnly("com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2")
   compileOnly("com.amazonaws.serverless:aws-serverless-java-container-core:1.9")
   testImplementation(projects.devLocalstack)
   testImplementation("io.micronaut.aws:micronaut-function-aws-api-proxy")
