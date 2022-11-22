@@ -86,12 +86,23 @@ filter @type="REPORT"
 
 The application gets additional detail to the X-Ray tracing by adding a TracingInterceptor to your AWS SDK clients. See `TracingInterceptorDynamoDbClientBuilderListener`. 
 
+### Traces for Java runtime
+
+Example cold start trace
+
+![Cold start X-Ray trace](xray-cold-java.png)
+
+Example warm start trace
+
+![Warm start X-Ray trace](xray-warm-java.png)
+
 ### Traces for Native Executable built with GraalVM deployed to a custom runtime
 
 Example cold start trace
 
-![Cold start X-Ray trace](xray-cold.png)
+![Cold start X-Ray trace](xray-cold-native.png)
 
 Example warm start trace
 
-![Warm start X-Ray trace](xray-warm.png)
+![Warm start X-Ray trace](xray-warm-native.png)
+
