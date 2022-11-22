@@ -64,6 +64,12 @@ public class AppStack extends Stack {
                 "mntodo-snapstart-api",
                 "SnapStartApiUrl",
                 Runtime.JAVA_SNAP_START);
+        createGatewayLambdaTable("function-java-snapstart-priming",
+                "mntodo-snapstart-priming-table",
+                "mntodo-snapstart-priming-function",
+                "mntodo-snapstart-priming-api",
+                "SnapStartPrimingApiUrl",
+                Runtime.JAVA_SNAP_START);
     }
 
     void createGatewayLambdaTable(String moduleName,

@@ -47,8 +47,8 @@ public class TodoSimulation extends Simulation {
                             ));
 
             setUp(scn.injectClosed(
-                            constantConcurrentUsers(50).during(7200), // 1
-                            rampConcurrentUsers(50).to(100).during(120) // 2
+                            constantConcurrentUsers(50).during(180),
+                            rampConcurrentUsers(50).to(100).during(120)
                             )
                     .protocols(httpProtocol)
             );

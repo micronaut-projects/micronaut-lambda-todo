@@ -1,11 +1,9 @@
 package com.example;
 
-import com.micronauttodo.dev.DevAuthenticationFetcher;
 import com.micronauttodo.models.TodoCreate;
 import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.services.TodoSaveService;
 import com.micronauttodo.utils.OauthUserUtils;
-import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.crac.OrderedResource;
 import io.micronaut.security.authentication.Authentication;
@@ -21,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Random;
 
-@Requires(bean = DevAuthenticationFetcher.class)
 @Singleton
 public class PrimingResource implements OrderedResource {
     private static final Logger LOG = LoggerFactory.getLogger(PrimingResource.class);

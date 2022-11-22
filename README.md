@@ -2,14 +2,15 @@
 
 ![Architecture diagram](architecture.png)
 
-This is a TODO serverless application built in Java with the [Micronaut Framework](https://micronaut.io) It consists of an[Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by a [AWS Lambda](https://aws.amazon.com/lambda/) function and an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
+This is a serverless application built in Java with the [Micronaut Framework](https://micronaut.io) It consists of an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by an [AWS Lambda](https://aws.amazon.com/lambda/) function and an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
 
 ## Deployments
 
-This application compares three deployment scenarios:
+This application compares four deployment scenarios:
 
 - FAT Jar to Java Runtime
 - FAT Jar to Java Runtime + SnapStart
+- FAT Jar to Java Runtime + SnapStart + Priming
 - Native executable built with [GraalVM](https://graalvm.org)  to a [custom AWS Lambda runtime](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html).
 
 ## Module Architecture
@@ -60,7 +61,35 @@ This is a demanding load test, to change it. Edit `TodoSimulation.java`
 
 ### CloudWatch Logs Insights
 
-Using this [CloudWatch Logs Insights query](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html), you can analyse the latency of the requests made to the Lambda functions.
+Using [CloudWatch Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html), you can analyse the latency of the requests made to the Lambda functions.
+
+### Max cold start with Cloud Watch Log Insights
+
+If you are not using SnapStart run: 
+
+```
+filter @type="REPORT"
+| fields greatest(@initDuration, 0) + @duration as duration
+| max(duration) as max
+```
+
+with SnapStart use: 
+
+```
+filter @message like "REPORT"
+| filter @message not like "RESTORE_REPORT"
+| parse @message /Restore Duration: (?<@restore_duration_ms>[0-9\.]+)/
+| parse @message / Duration: (?<@invoke_duration_ms>[0-9\.]+)/
+| fields
+greatest(@restore_duration_ms, 0) as restore_duration_ms,
+greatest(@invoke_duration_ms, 0) as invoke_duration_ms
+| fields
+restore_duration_ms + invoke_duration_ms as total_invoke_ms
+| stat
+max(total_invoke_ms) as max
+```
+
+### Separate Cold Starts without SnapStart
 
 The query separates cold starts from other requests and then gives you p50, p90 and p99 percentiles.
 
@@ -68,6 +97,27 @@ The query separates cold starts from other requests and then gives you p50, p90 
 filter @type="REPORT"
 | fields greatest(@initDuration, 0) + @duration as duration, ispresent(@initDuration) as coldStart
 | stats count(*) as count, pct(duration, 50) as p50, pct(duration, 90) as p90, pct(duration, 99) as p99, max(duration) as max by coldStart
+```
+
+### Percentiles with SnapStart
+
+if you are using SnapStart you can use: 
+
+```
+filter @message like "REPORT"
+| filter @message not like "RESTORE_REPORT"
+| parse @message /Restore Duration: (?<@restore_duration_ms>[0-9\.]+)/
+| parse @message / Duration: (?<@invoke_duration_ms>[0-9\.]+)/
+| fields
+greatest(@restore_duration_ms, 0) as restore_duration_ms,
+greatest(@invoke_duration_ms, 0) as invoke_duration_ms
+| fields
+restore_duration_ms + invoke_duration_ms as total_invoke_ms
+| stat
+pct(total_invoke_ms, 50) as total_invoke_ms_p50,
+pct(total_invoke_ms, 99) as total_invoke_ms_p99,
+pct(total_invoke_ms, 99.9) as total_invoke_ms_p99.9
+max(total_invoke_ms) as max
 ```
 
 #### CloudWatch Log Insights Java Runtime
@@ -78,7 +128,7 @@ filter @type="REPORT"
 
 ![CloudWatch Logs Insights results for Java Runtime](cloudwatch-log-insights-java-snapstart.png)
 
-#### CloudWatch Log Insights Java Runtime
+#### CloudWatch Log Insights Custom Runtime
 
 ![CloudWatch Logs Insights results for Native Executable build with GraalVM in AWS Lambda Custom runtime](cloudwatch-log-insights-native.png)
 

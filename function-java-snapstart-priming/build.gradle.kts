@@ -6,6 +6,7 @@ dependencies {
     implementation(projects.devSecurity)
     implementation(projects.code)
     implementation("io.micronaut.crac:micronaut-crac")
+    implementation("io.micronaut.security:micronaut-security-jwt")
     testImplementation(projects.devLocalstack)
     testImplementation("io.micronaut.security:micronaut-security-oauth2")
 }
