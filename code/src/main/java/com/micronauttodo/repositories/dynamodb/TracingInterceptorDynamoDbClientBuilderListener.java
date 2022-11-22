@@ -8,6 +8,7 @@ import io.micronaut.context.event.BeanCreatedEventListener;
 import jakarta.inject.Singleton;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 
+@Requires(classes = TracingInterceptor.class)
 @Requires(Environment.AMAZON_EC2)
 @Singleton
 class TracingInterceptorDynamoDbClientBuilderListener
