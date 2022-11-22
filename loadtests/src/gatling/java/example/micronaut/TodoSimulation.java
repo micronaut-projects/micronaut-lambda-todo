@@ -8,14 +8,8 @@ import java.util.Random;
 
 import static io.gatling.javaapi.core.CoreDsl.StringBody;
 import static io.gatling.javaapi.core.CoreDsl.constantConcurrentUsers;
-import static io.gatling.javaapi.core.CoreDsl.constantUsersPerSec;
 import static io.gatling.javaapi.core.CoreDsl.rampConcurrentUsers;
-import static io.gatling.javaapi.core.CoreDsl.rampUsers;
-import static io.gatling.javaapi.core.CoreDsl.rampUsersPerSec;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
-import static io.gatling.javaapi.core.CoreDsl.stressPeakUsers;
-import static io.gatling.javaapi.core.OpenInjectionStep.atOnceUsers;
-import static io.gatling.javaapi.core.OpenInjectionStep.nothingFor;
 import static io.gatling.javaapi.http.HttpDsl.header;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
