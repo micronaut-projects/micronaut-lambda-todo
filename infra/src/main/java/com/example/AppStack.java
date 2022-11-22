@@ -124,6 +124,7 @@ public class AppStack extends Stack {
                 .tracing(Tracing.ACTIVE)
                 .architecture(Architecture.X86_64)
                 .logRetention(RetentionDays.FIVE_DAYS);
+
         if (runtime == Runtime.JAVA_SNAP_START) {
             //builder = builder.snapstart(SnapStart.PUBLISHED_VERSIONS);
         }
