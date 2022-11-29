@@ -1,5 +1,6 @@
 package com.micronauttodo.controllers;
 
+import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
@@ -19,8 +20,9 @@ import java.util.Collections;
 @Controller
 public class HomeController extends AbstractController {
     public HomeController(HttpHostResolver httpHostResolver,
+                          StageResolver stageResolver,
                           ServerContextPathProvider serverContextPathProvider) {
-        super(httpHostResolver, serverContextPathProvider);
+        super(httpHostResolver, stageResolver, serverContextPathProvider);
     }
 
     @Secured(SecurityRule.IS_ANONYMOUS)

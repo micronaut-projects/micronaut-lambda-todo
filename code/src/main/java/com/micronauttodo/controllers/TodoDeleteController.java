@@ -1,5 +1,6 @@
 package com.micronauttodo.controllers;
 
+import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.services.TodoDeleteService;
@@ -33,9 +34,10 @@ class TodoDeleteController extends AbstractController {
     private final TodoDeleteService todoDeleteService;
 
     TodoDeleteController(HttpHostResolver httpHostResolver,
-                         TodoDeleteService todoDeleteService,
-                         ServerContextPathProvider serverContextPathProvider) {
-        super(httpHostResolver, serverContextPathProvider);
+                         StageResolver stageResolver,
+                         ServerContextPathProvider serverContextPathProvider,
+                         TodoDeleteService todoDeleteService) {
+        super(httpHostResolver, stageResolver, serverContextPathProvider);
         this.todoDeleteService = todoDeleteService;
     }
 

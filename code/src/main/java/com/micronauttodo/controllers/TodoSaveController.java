@@ -1,5 +1,6 @@
 package com.micronauttodo.controllers;
 
+import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
 import com.micronauttodo.models.TodoCreate;
@@ -32,9 +33,11 @@ import javax.validation.constraints.NotBlank;
 public class TodoSaveController extends AbstractController {
     private final TodoSaveService todoSaveService;
 
-    public TodoSaveController(HttpHostResolver httpHostResolver, TodoSaveService todoSaveService,
-                              ServerContextPathProvider serverContextPathProvider) {
-        super(httpHostResolver, serverContextPathProvider);
+    public TodoSaveController(HttpHostResolver httpHostResolver,
+                              StageResolver stageResolver,
+                              ServerContextPathProvider serverContextPathProvider,
+                              TodoSaveService todoSaveService) {
+        super(httpHostResolver, stageResolver, serverContextPathProvider);
         this.todoSaveService = todoSaveService;
     }
 
