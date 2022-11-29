@@ -1,5 +1,5 @@
 #!/bin/bash
-STACK_NAME=MnTodoStack
+STACK_NAME=MnHelloWorldStack
 
 export API_URL="$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].Outputs[?OutputKey==`JavaApiUrl`].OutputValue' --output text --profile=softamodev)"
 echo API_URL

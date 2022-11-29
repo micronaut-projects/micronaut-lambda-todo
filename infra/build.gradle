@@ -14,7 +14,6 @@ dependencies {
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
-    implementation(projects.repositoriesDynamodbConstants)
 }
 application {
     mainClass.set("com.example.Main")

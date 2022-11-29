@@ -25,45 +25,20 @@ public class TodoSimulation extends Simulation {
             HttpProtocolBuilder httpProtocol = http.baseUrl(apiUrl);
             String name = System.getenv(TEST_SUITE) != null ? System.getenv(TEST_SUITE) : "Simple";
             ScenarioBuilder scn = scenario(name)
-                    .exec(http("CreateTodo")
-                            .post("/api/v1/todo")
-                            .body(StringBody("{ \"task\": \" " + randomAlphanumeric(20) + " \" }"))
-                            .asJson()
-                            .check(
-                                    status().is(201),
-                                    header("Location").saveAs("loc")
-                            )
-                    ).exec(http("ListTodo")
-                                    .get("/api/v1/todo")
+                    .exec(http("HelloWorld")
+                                    .get("/")
                                     .asJson()
                                     .check(
                                             status().is(200)
                                     )
-                    ).exec(http("DeleteTodo")
-                            .delete(session -> session.get("loc"))
-                            .asJson()
-                            .check(
-                                    status().is(204)
-                            ));
-
+                    );
             setUp(scn.injectClosed(
-                            constantConcurrentUsers(50).during(180),
-                            rampConcurrentUsers(50).to(100).during(120)
+                            constantConcurrentUsers(50).during(30),
+                            rampConcurrentUsers(50).to(100).during(30)
                             )
                     .protocols(httpProtocol)
             );
         }
     }
 
-    private static String randomAlphanumeric(int length) {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        Random random = new Random();
-        StringBuilder buffer = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        return buffer.toString();
-    }
 }
