@@ -21,7 +21,7 @@ if [ $EXIT_STATUS -ne 0 ]; then
  exit $EXIT_STATUS
 fi
 cd infra
-cdk deploy --require-approval never || EXIT_STATUS=$?
+cdk deploy || EXIT_STATUS=$?
 if [ $EXIT_STATUS -ne 0 ]; then
   exit $EXIT_STATUS
 fi
