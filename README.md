@@ -50,8 +50,21 @@ CDK creates three outputs with the API Gateway endpoint URLs to use in our load 
 Currently, CDK does not support SnapStart yet. Thus, before running the load tests you need to;
 
 - [Activate SnapStart](https://docs.aws.amazon.com/lambda/latest/dg/snapstart-activate.html)
+
+![Enable SnapStart](enable-snapstart-on-published-versions.png)
+
+
 - Publish a version with Snapstart enabled.
-- Update your API Gateway routes to point to the version ARN.  
+
+![PublishVersion](publish-version.png)
+
+- Copy the ARN of version
+
+![AWS Lambda Version Copy ARN](aws-lambda-version-arn.png)
+
+- Update your API Gateway routes to point to the version ARN.
+
+![API Gateway Lambda Proxy](apigateway-lambda-proxy-integration.png)
 
 ## Load Tests
 
