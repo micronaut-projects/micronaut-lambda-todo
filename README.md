@@ -68,7 +68,7 @@ Currently, CDK does not support SnapStart yet. Thus, before running the load tes
 
 ## Load Tests
 
-- The application uses [Gatling](https://gatling.io/) to load-testing the application. Module `loadtests` contains the Gatling load tests code.
+- The application uses [Gatling](https://gatling.io/) to load test the application. Module `loadtests` contains the Gatling load tests code.
 
 The load test executes a simulation which runs a POST, GET, DELETE scenario with 50 concurrent users for 3 minutes and then ramps up to 100 concurrent users for extra 2 minutes.    
 
