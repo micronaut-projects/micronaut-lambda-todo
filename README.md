@@ -2,7 +2,7 @@
 
 ![Architecture diagram](architecture.png)
 
-This is a serverless application built in Java with the [Micronaut Framework](https://micronaut.io) It consists of an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by an [AWS Lambda](https://aws.amazon.com/lambda/) function and an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
+This is a serverless application built in Java with the [Micronaut Framework](https://micronaut.io). It consists of an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) backed by an [AWS Lambda](https://aws.amazon.com/lambda/) function and an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table for storage.
 
 ## Deployments
 
