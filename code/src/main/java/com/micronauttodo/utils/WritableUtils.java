@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import java.util.Optional;
 
 public final class WritableUtils {
+
     private WritableUtils() {
     }
 

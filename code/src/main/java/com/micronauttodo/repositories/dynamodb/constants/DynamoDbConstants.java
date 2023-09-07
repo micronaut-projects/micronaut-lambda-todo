@@ -6,7 +6,6 @@ import software.amazon.awssdk.services.dynamodb.model.CreateTableRequest;
 import software.amazon.awssdk.services.dynamodb.model.GlobalSecondaryIndex;
 import software.amazon.awssdk.services.dynamodb.model.KeySchemaElement;
 import software.amazon.awssdk.services.dynamodb.model.KeyType;
-import software.amazon.awssdk.services.dynamodb.model.Projection;
 import software.amazon.awssdk.services.dynamodb.model.ProjectionType;
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
 
@@ -86,9 +85,7 @@ return CreateTableRequest.builder()
                         .attributeName(skAttributeName)
                         .keyType(KeyType.RANGE)
                         .build())
-                .projection(Projection.builder()
-                        .projectionType(ProjectionType.ALL)
-                        .build())
+                .projection(b -> b.projectionType(ProjectionType.ALL))
                 .build();
     }
 }
