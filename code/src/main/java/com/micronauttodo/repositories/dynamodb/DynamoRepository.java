@@ -169,13 +169,11 @@ public abstract class DynamoRepository {
     private <T> T fromItem(@NonNull Class<T> cls,
                            @NonNull Map<String, AttributeValue> item) {
         BeanIntrospection<T> introspection = BeanIntrospection.getIntrospection(cls);
-        Object[] arguments = new Object[introspection.getPropertyNames().length];
-        int index = 0;
+        BeanIntrospection.Builder<T> builder = introspection.builder();
         for (String propertyName : introspection.getPropertyNames()) {
-            arguments[index] = parseArgument(item, propertyName, introspection).orElse(null);
-            index++;
+            builder.with(propertyName, parseArgument(item, propertyName, introspection).orElse(null));
         }
-        return introspection.instantiate(arguments);
+        return builder.build();
     }
 
     private <T> Optional<Object> parseArgument(@NonNull Map<String, AttributeValue> item,
