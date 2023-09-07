@@ -4,7 +4,7 @@ import com.micronauttodo.repositories.dynamodb.constants.DynamoConfiguration;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Requires(property = "dynamodb.table-name")
 @ConfigurationProperties("dynamodb")

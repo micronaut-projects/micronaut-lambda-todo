@@ -4,8 +4,8 @@ import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.TodoCreate;
 import io.micronaut.core.annotation.NonNull;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public interface TodoSaveService {
     @NonNull

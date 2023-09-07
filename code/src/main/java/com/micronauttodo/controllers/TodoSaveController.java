@@ -4,7 +4,6 @@ import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
 import com.micronauttodo.models.TodoCreate;
-import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.services.TodoSaveService;
 import com.micronauttodo.utils.TurboUtils;
 import io.micronaut.context.annotation.Requires;
@@ -26,7 +25,7 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.views.turbo.http.TurboMediaType;
 import io.swagger.v3.oas.annotations.Hidden;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Requires(beans = {TodoSaveService.class})
 @Controller
