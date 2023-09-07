@@ -54,7 +54,8 @@ jobs:
           ./gradlew build --continue
 
       - name: "⏫ Upload spock reports"
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: '*/build/reports/tests/test/index.html'
+          path: '*/build/reports/tests/test/**'
