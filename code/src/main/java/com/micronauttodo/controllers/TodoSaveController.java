@@ -11,6 +11,7 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -46,7 +47,7 @@ public class TodoSaveController extends AbstractController {
     @ExecuteOn(TaskExecutors.IO)
     @Post("/todo")
     HttpResponse<?> save(//@NonNull @NotNull @Valid TodoCreate todo,
-                         @NonNull @NotBlank String task,
+                         @Body @NonNull @NotBlank String task,
                          @NonNull OAuthUser oAuthUser,
                          HttpRequest<?> request) {
         // Workaround due to lambda binding issue
