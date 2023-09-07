@@ -12,7 +12,12 @@ class OauthClientConfigurationTest extends AbstractTest {
 
     @BeforeAll
     public static void setupSpec() {
-        startHandler(Collections.singletonMap("dynamodb.table-name", "todo"));
+        try {
+            startHandler(Collections.singletonMap("dynamodb.table-name", "todo"));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Test

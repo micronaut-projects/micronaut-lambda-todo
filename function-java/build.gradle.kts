@@ -15,3 +15,9 @@ dependencies {
 application {
     mainClass.set("com.example.Application")
 }
+
+tasks.withType<Test> {
+    testLogging {
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+    }
+}
