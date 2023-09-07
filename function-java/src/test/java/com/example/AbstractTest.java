@@ -1,27 +1,25 @@
 package com.example;
 
-import com.amazonaws.serverless.exceptions.ContainerInitializationException;
-import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.amazonaws.services.lambda.runtime.Context;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.CollectionUtils;
-import io.micronaut.function.aws.proxy.MicronautLambdaHandler;
+import io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction;
 import io.micronaut.http.HttpRequest;
+import io.micronaut.json.JsonMapper;
 import org.junit.jupiter.api.AfterAll;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractTest {
-    private static MicronautLambdaHandler handler;
-    private static Context lambdaContext = new MockLambdaContext();
+    private static ApiGatewayProxyRequestEventFunction handler;
+    private static Context lambdaContext;
 
     @Container
     static GenericContainer dynamoDBLocal =
@@ -42,11 +40,7 @@ public abstract class AbstractTest {
     }
 
     protected static void startHandler(Map<String, Object> properties) {
-        try {
-            handler = new MicronautLambdaHandler(ApplicationContext.builder().properties(getProperties(properties)));
-        } catch (ContainerInitializationException e) {
-            e.printStackTrace();
-        }
+        handler = new ApiGatewayProxyRequestEventFunction(ApplicationContext.builder().properties(getProperties(properties)).build());
     }
 
     protected static void startHandler() {
@@ -66,11 +60,11 @@ public abstract class AbstractTest {
         return handler.getApplicationContext().containsBean(beanType);
     }
 
-    protected Response<?> exchange(HttpRequest<?> request) throws JsonProcessingException {
+    protected Response<?> exchange(HttpRequest<?> request) throws IOException {
         return exchange(request, null);
     }
 
-    protected <T> Response<T> exchange(HttpRequest<?> request, @Nullable Class<T> responseType) throws JsonProcessingException {
-        return TestUtils.exchange(getBean(ObjectMapper.class), handler, lambdaContext, request, responseType);
+    protected <T> Response<T> exchange(HttpRequest<?> request, @Nullable Class<T> responseType) throws IOException {
+        return TestUtils.exchange(handler, getBean(JsonMapper.class), lambdaContext, request, responseType);
     }
 }

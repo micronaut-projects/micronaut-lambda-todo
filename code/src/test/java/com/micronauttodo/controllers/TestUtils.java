@@ -1,67 +1,124 @@
 package com.micronauttodo.controllers;
 
-import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
-import com.amazonaws.serverless.proxy.model.AwsProxyRequestContext;
-import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
-import com.amazonaws.serverless.proxy.model.Headers;
 import com.amazonaws.services.lambda.runtime.Context;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
-import io.micronaut.function.aws.proxy.MicronautLambdaHandler;
-import io.micronaut.http.HttpMethod;
+import io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.MediaType;
+import io.micronaut.json.JsonMapper;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public final class TestUtils {
     private TestUtils() {
 
     }
 
-    public static <T> Response<T> exchange(ObjectMapper objectMapper,
-                                    MicronautLambdaHandler handler,
-                                    Context context,
-                                    HttpRequest<?> request,
-                                       @Nullable Class<T> responseType) throws JsonProcessingException {
-        AwsProxyRequest awsProxyRequest = new AwsProxyRequest();
-        awsProxyRequest.setRequestContext(new AwsProxyRequestContext());
-        awsProxyRequest.setHttpMethod(request.getMethod().toString());
-        awsProxyRequest.setPath(request.getPath());
+    public static APIGatewayProxyRequestEvent create(@NonNull HttpRequest<?> request, JsonMapper jsonMapper) {
+        Map<String, String> headers = new LinkedHashMap<>();
+        Map<String, List<String>> multiHeaders = new LinkedHashMap<>();
+        request.getHeaders().forEach((name, values) -> {
+            if (values.size() > 1) {
+                multiHeaders.put(name, values);
+            } else {
+                headers.put(name, values.get(0));
+            }
+        });
+        return new APIGatewayProxyRequestEvent() {
 
-        Headers headers = new Headers();
-        for (String headerName : request.getHeaders().names()) {
-            headers.put(headerName, request.getHeaders().getAll(headerName));
-        }
-        awsProxyRequest.setMultiValueHeaders(headers);
-        if (request.getMethod() == HttpMethod.POST) {
-            request.getBody().ifPresent(b -> {
+            @Override
+            public Map<String, String> getHeaders() {
+                return headers;
+            }
 
-                if (request.getContentType().isPresent() && request.getContentType().get().toString().equals(MediaType.APPLICATION_FORM_URLENCODED.toString())) {
-                    request.getBody(Map.class).ifPresent(m -> {
-                        Map<String, Object> body = (Map<String, Object>) m;
-                        String formUrlEncodedBody = body.entrySet().stream()
-                                .map(p -> urlEncodeUTF8(p.getKey()) + "=" + urlEncodeUTF8(p.getValue().toString()))
-                                .reduce((p1, p2) -> p1 + "&" + p2)
-                                .orElse("");
-                        awsProxyRequest.setBody(formUrlEncodedBody);
-                    });
-                } else {
-                    try {
-                        awsProxyRequest.setBody(objectMapper.writeValueAsString(b));
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
+            @Override
+            public Map<String, List<String>> getMultiValueHeaders() {
+                return multiHeaders;
+            }
+
+            @Override
+            public Map<String, String> getQueryStringParameters() {
+                Map<String, String> result = new HashMap<>();
+                for (String paramName : request.getParameters().names()) {
+                    result.put(paramName, request.getParameters().get(paramName));
                 }
-            });
+                return result;
+            }
+
+            @Override
+            public Map<String, List<String>> getMultiValueQueryStringParameters() {
+                Map<String, List<String>> result = new HashMap<>();
+                for (String paramName : request.getParameters().names()) {
+                    result.put(paramName, request.getParameters().getAll(paramName));
+                }
+                return result;
+            }
+
+            @Override
+            public String getPath() {
+                return request.getPath();
+            }
+
+            @Override
+            public String getHttpMethod() {
+                return request.getMethodName();
+            }
+
+            @Override
+            public String getBody() {
+                return request.getBody()
+                        .flatMap(b -> bodyAsString(jsonMapper,
+                                () -> request.getContentType().orElse(null),
+                                request::getCharacterEncoding,
+                                () -> b)
+                        ).orElse(null);
+            }
+        };
+    }
+
+    public static Optional<String> bodyAsString(@NonNull JsonMapper jsonMapper,
+                                                @NonNull Supplier<MediaType> contentTypeSupplier,
+                                                @NonNull Supplier<Charset> characterEncodingSupplier ,
+                                                @NonNull Supplier<Object> bodySupplier) {
+        Object body = bodySupplier.get();
+        MediaType mediaType = contentTypeSupplier.get();
+        boolean mapFromJson = mediaType == null || mediaType.equals(MediaType.APPLICATION_JSON_TYPE);
+        if (body instanceof CharSequence) {
+            return Optional.of(body.toString());
+        } else if (body instanceof byte[] bytes) {
+            return Optional.of(new String(bytes, characterEncodingSupplier.get()));
+        } else if (mapFromJson) {
+            try {
+                return Optional.of(jsonMapper.writeValueAsString(body));
+            } catch (IOException e) {
+                return Optional.empty();
+            }
         }
-        AwsProxyResponse response = handler.handleRequest(awsProxyRequest, context);
-        return responseType == null ?
-                new Response(response.getStatusCode()) :
-                new Response(response.getStatusCode(), objectMapper.readValue(response.getBody(), responseType));
+        return Optional.empty();
+    }
+
+    public static <T> Response<T> exchange(
+            ApiGatewayProxyRequestEventFunction handler,
+            JsonMapper jsonMapper,
+            Context context,
+            HttpRequest<?> request,
+            @Nullable Class<T> responseType
+    ) throws IOException {
+        APIGatewayProxyRequestEvent awsProxyRequest = create(request, jsonMapper);
+        APIGatewayProxyResponseEvent awsProxyResponse = handler.handleRequest(awsProxyRequest, context);
+        return new Response(awsProxyResponse.getStatusCode(), awsProxyResponse.getBody());
     }
 
     static String urlEncodeUTF8(String s) {
@@ -71,9 +128,10 @@ public final class TestUtils {
             throw new UnsupportedOperationException(e);
         }
     }
-    static String urlEncodeUTF8(Map<?,?> map) {
+
+    static String urlEncodeUTF8(Map<?, ?> map) {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<?,?> entry : map.entrySet()) {
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
             if (sb.length() > 0) {
                 sb.append("&");
             }
