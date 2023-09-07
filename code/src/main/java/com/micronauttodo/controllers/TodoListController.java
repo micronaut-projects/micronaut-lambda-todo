@@ -24,11 +24,11 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Controller
 class TodoListController {
     private final HttpHostResolver httpHostResolver;
-    private final TokenResolver tokenResolver;
+    private final TokenResolver<HttpRequest<?>> tokenResolver;
     private final TodoRepository todoRepository;
 
     public TodoListController(HttpHostResolver httpHostResolver,
-                              TokenResolver tokenResolver,
+                              TokenResolver<HttpRequest<?>> tokenResolver,
                               TodoRepository todoRepository) {
         this.httpHostResolver = httpHostResolver;
         this.tokenResolver = tokenResolver;

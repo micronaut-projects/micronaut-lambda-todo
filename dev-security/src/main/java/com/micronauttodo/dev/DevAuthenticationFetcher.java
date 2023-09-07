@@ -7,16 +7,16 @@ import io.micronaut.http.HttpRequest;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.filters.AuthenticationFetcher;
 import io.micronaut.security.oauth2.configuration.OauthClientConfiguration;
-import io.micronaut.security.token.jwt.generator.AccessTokenConfiguration;
-import io.micronaut.security.token.jwt.generator.claims.ClaimsGenerator;
-import io.micronaut.security.token.jwt.generator.claims.JwtClaims;
+import io.micronaut.security.token.Claims;
+import io.micronaut.security.token.claims.ClaimsGenerator;
+import io.micronaut.security.token.generator.AccessTokenConfiguration;
 import jakarta.inject.Singleton;
 import org.reactivestreams.Publisher;
 import java.util.Map;
 
 @Requires(missingBeans = OauthClientConfiguration.class)
 @Singleton
-public class DevAuthenticationFetcher implements AuthenticationFetcher {
+public class DevAuthenticationFetcher implements AuthenticationFetcher<HttpRequest<?>> {
 
     private final AccessTokenConfiguration accessTokenConfiguration;
     private final ClaimsGenerator claimsGenerator;
@@ -54,8 +54,8 @@ public class DevAuthenticationFetcher implements AuthenticationFetcher {
 
     public Map<String, Object> oldClaims() {
         return Map.of(
-                JwtClaims.ISSUER, "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdemu6o0#",
-                JwtClaims.SUBJECT, ID,
+                Claims.ISSUER, "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdemu6o0#",
+                Claims.SUBJECT, ID,
                 "email", "john@email.com"
         );
     }

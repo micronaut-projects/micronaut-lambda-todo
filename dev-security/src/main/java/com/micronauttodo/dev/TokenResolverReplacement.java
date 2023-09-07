@@ -12,7 +12,7 @@ import java.util.Optional;
 @Requires(beans = DevAuthenticationFetcher.class)
 @Replaces(TokenResolver.class)
 @Singleton
-public class TokenResolverReplacement implements TokenResolver {
+public class TokenResolverReplacement implements TokenResolver<HttpRequest<?>> {
     private final TokenGenerator tokenGenerator;
     private final DevAuthenticationFetcher devAuthenticationFetcher;
 
