@@ -1,8 +1,7 @@
 package com.micronauttodo.controllers;
 
 import com.micronauttodo.models.OAuthUser;
-import com.micronauttodo.repositories.TodoRepository;
-import com.micronauttodo.services.TodoDeleteService;
+import com.micronauttodo.repositories.dynamodb.TodoRepository;
 import com.micronauttodo.views.TodoModel;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;

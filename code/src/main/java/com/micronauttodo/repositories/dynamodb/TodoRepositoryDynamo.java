@@ -2,7 +2,6 @@ package com.micronauttodo.repositories.dynamodb;
 
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
-import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.repositories.dynamodb.constants.DynamoConfiguration;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;

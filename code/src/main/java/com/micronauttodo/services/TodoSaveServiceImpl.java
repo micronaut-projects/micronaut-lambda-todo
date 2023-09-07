@@ -3,7 +3,7 @@ package com.micronauttodo.services;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.TodoCreate;
 import com.micronauttodo.models.Todo;
-import com.micronauttodo.repositories.TodoRepository;
+import com.micronauttodo.repositories.dynamodb.TodoRepository;
 import com.micronauttodo.models.events.TodoSavedEvent;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventPublisher;

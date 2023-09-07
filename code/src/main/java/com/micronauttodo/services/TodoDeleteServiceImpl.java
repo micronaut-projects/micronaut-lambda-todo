@@ -2,7 +2,7 @@ package com.micronauttodo.services;
 
 import com.micronauttodo.models.events.TodoDeletedEvent;
 import com.micronauttodo.models.OAuthUser;
-import com.micronauttodo.repositories.TodoRepository;
+import com.micronauttodo.repositories.dynamodb.TodoRepository;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.core.annotation.NonNull;

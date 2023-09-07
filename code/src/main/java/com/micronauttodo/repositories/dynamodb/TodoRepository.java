@@ -1,4 +1,4 @@
-package com.micronauttodo.repositories;
+package com.micronauttodo.repositories.dynamodb;
 
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;

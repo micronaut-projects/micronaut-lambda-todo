@@ -1,7 +1,7 @@
 package com.example;
 
 import com.micronauttodo.models.TodoCreate;
-import com.micronauttodo.repositories.TodoRepository;
+import com.micronauttodo.repositories.dynamodb.TodoRepository;
 import com.micronauttodo.services.TodoSaveService;
 import com.micronauttodo.utils.OauthUserUtils;
 import io.micronaut.core.annotation.NonNull;

@@ -1,13 +1,11 @@
 package com.micronauttodo.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
-import com.micronauttodo.repositories.TodoRepository;
+import com.micronauttodo.repositories.dynamodb.TodoRepository;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.core.convert.ArgumentConversionContext;
-import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpStatus;
