@@ -17,7 +17,6 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.context.ServerContextPathProvider;
 import io.micronaut.http.server.util.HttpHostResolver;
-import io.micronaut.http.uri.UriBuilder;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;

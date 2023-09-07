@@ -24,11 +24,10 @@ public class LinkBuilderReplacement extends LinkBuilder {
     @Override
     protected String computeContextPath(IExpressionContext context, String base, Map<String, Object> parameters) {
         String contextPath = super.computeContextPath(context, base, parameters);
-        if (context instanceof WebEngineContext) {
-            WebEngineContext webEngineContext = (WebEngineContext) context;
-                contextPath = stageResolver.resolveStage(webEngineContext.getRequest())
-                        .map(stage -> stage.startsWith(SLASH) ? stage : SLASH + stage)
-                        .orElse(contextPath);
+        if (context instanceof WebEngineContext webEngineContext) {
+            contextPath = stageResolver.resolveStage(webEngineContext.getRequest())
+                    .map(stage -> stage.startsWith(SLASH) ? stage : SLASH + stage)
+                    .orElse(contextPath);
         }
         return contextPath;
     }

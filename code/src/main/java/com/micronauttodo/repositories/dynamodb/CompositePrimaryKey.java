@@ -28,9 +28,9 @@ public interface CompositePrimaryKey {
     default Map<String, AttributeValue> toKey() {
         Map<String, AttributeValue> result = new HashMap<>();
         result.put(getPartitionKeyName(), AttributeValue.builder().s(getPartitionKey()).build());
-        getSortKey().ifPresent(sortKey -> {
-            result.put(getSortKeyName(), AttributeValue.builder().s(sortKey).build());
-        });
+        getSortKey().ifPresent(sortKey ->
+            result.put(getSortKeyName(), AttributeValue.builder().s(sortKey).build())
+        );
         return result;
     }
 }
