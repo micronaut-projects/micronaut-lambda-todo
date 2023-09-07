@@ -1,10 +1,11 @@
 plugins {
     id("com.micronauttodo.build.internal.base-module")
 }
+
 dependencies {
-    testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testAnnotationProcessor(platform("io.micronaut.platform:micronaut-platform:$micronautVersion"))
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-    testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testImplementation(platform("io.micronaut.platform:micronaut-platform:$micronautVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("io.micronaut.test:micronaut-test-junit5")

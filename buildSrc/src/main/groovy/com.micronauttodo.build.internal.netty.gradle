@@ -3,10 +3,13 @@ plugins {
     id("com.github.johnrengelman.shadow")
     id("io.micronaut.application")
 }
+
 version = "0.1"
+
 dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 }
+
 micronaut {
     runtime("netty")
     testRuntime("junit5")

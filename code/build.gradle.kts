@@ -2,7 +2,9 @@ plugins {
   id("com.micronauttodo.build.internal.lib-module")
   id("com.micronauttodo.build.internal.test-module")
 }
+
 val micronautVersion: String by project
+
 dependencies {
   annotationProcessor("io.micronaut.openapi:micronaut-openapi")
   annotationProcessor("io.micronaut.security:micronaut-security-annotations")
@@ -24,17 +26,20 @@ dependencies {
 
   implementation(platform("com.amazonaws:aws-xray-recorder-sdk-bom:2.13.0"))
   compileOnly("com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2")
-  compileOnly("com.amazonaws.serverless:aws-serverless-java-container-core:1.9")
   testImplementation(projects.devLocalstack)
   testImplementation("io.micronaut.aws:micronaut-function-aws-api-proxy")
+  testRuntimeOnly("org.yaml:snakeyaml")
 }
+
 tasks.withType<Test> {
   useJUnitPlatform()
 }
+
 java {
-  sourceCompatibility = JavaVersion.toVersion("11")
-  targetCompatibility = JavaVersion.toVersion("11")
+  sourceCompatibility = JavaVersion.toVersion("17")
+  targetCompatibility = JavaVersion.toVersion("17")
 }
+
 repositories {
   mavenCentral()
 }

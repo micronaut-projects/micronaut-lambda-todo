@@ -6,6 +6,3 @@ repositories {
     gradlePluginPortal()
     mavenCentral()
 }
-
-dependencies {
-}

@@ -1,6 +1,10 @@
 plugins {
     id 'java'
-    id 'io.gatling.gradle' version '3.7.6.1'
+    id 'io.gatling.gradle' version '3.9.5.5'
+}
+
+repositories {
+    mavenCentral()
 }
 
 gatling {

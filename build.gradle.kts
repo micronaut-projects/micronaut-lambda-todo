@@ -5,9 +5,10 @@ buildscript {
         }
     }
 }
+
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
-    id("io.micronaut.library") version "3.6.5" apply false
-    id("io.micronaut.minimal.application") version "3.6.5" apply false
-    id("io.micronaut.application") version "3.6.5" apply false
+    id("io.micronaut.library") version "4.0.3" apply false
+    id("io.micronaut.minimal.application") version "4.0.3" apply false
+    id("io.micronaut.application") version "4.0.3" apply false
 }
