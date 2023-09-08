@@ -89,7 +89,7 @@ public class AppStack extends Stack {
                         .build());
             }
             Version currentVersion = function.getCurrentVersion();
-            Alias prodAlias = Alias.Builder.create(this, "ProdAlias")
+            Alias prodAlias = Alias.Builder.create(this, functionId + "ProdAlias")
                     .aliasName("Prod")
                     .version(currentVersion)
                     .build();
