@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     testAnnotationProcessor(platform("io.micronaut.platform:micronaut-platform:$micronautVersion"))
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testAnnotationProcessor("io.micronaut:micronaut-inject-java")
     testImplementation(platform("io.micronaut.platform:micronaut-platform:$micronautVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
