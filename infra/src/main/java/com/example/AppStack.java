@@ -16,12 +16,10 @@ import software.amazon.awscdk.services.dynamodb.AttributeType;
 import software.amazon.awscdk.services.dynamodb.BillingMode;
 import software.amazon.awscdk.services.dynamodb.GlobalSecondaryIndexProps;
 import software.amazon.awscdk.services.dynamodb.Table;
-import software.amazon.awscdk.services.lambda.Architecture;
-import software.amazon.awscdk.services.lambda.Code;
-import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.Tracing;
+import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.logs.RetentionDays;
 import software.constructs.Construct;
+import software.constructs.IConstruct;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,15 +79,32 @@ public class AppStack extends Stack {
         Table table = createTable(tableName);
         Map<String, String> env = environmentVariables(table);
         Function function = createAppFunction(moduleName, functionId, env, runtime).build();
+        LambdaRestApi api;
+        if (runtime == Runtime.JAVA_SNAP_START) {
+            IConstruct defaultChild = function.getNode().getDefaultChild();
+            if (defaultChild instanceof CfnFunction) {
+                CfnFunction cfnFunction = (CfnFunction) defaultChild;
+                cfnFunction.setSnapStart(CfnFunction.SnapStartProperty.builder()
+                        .applyOn("PublishedVersions")
+                        .build());
+            }
+            Version currentVersion = function.getCurrentVersion();
+            Alias prodAlias = Alias.Builder.create(this, functionId + "ProdAlias")
+                    .aliasName("Prod")
+                    .version(currentVersion)
+                    .build();
+            api = createRestApi(apiId, prodAlias);
+        } else {
+            api = createRestApi(apiId, function);
+        }
         table.grantReadWriteData(function);
-        LambdaRestApi api = createRestApi(apiId, function);
         CfnOutput.Builder.create(this, outputId)
                 .exportName(outputId)
                 .value(api.getUrl())
                 .build();
     }
 
-    private LambdaRestApi createRestApi(String id, Function function) {
+    private LambdaRestApi createRestApi(String id, IFunction function) {
         return LambdaRestApi.Builder.create(this, id)
                 .handler(function)
                 .endpointConfiguration(EndpointConfiguration.builder()
@@ -131,9 +146,6 @@ public class AppStack extends Stack {
                 .architecture(Architecture.X86_64)
                 .logRetention(RetentionDays.FIVE_DAYS);
 
-        if (runtime == Runtime.JAVA_SNAP_START) {
-            //builder = builder.snapstart(SnapStart.PUBLISHED_VERSIONS);
-        }
         return (handler != null) ? builder.handler(handler) : builder;
     }
 

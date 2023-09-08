@@ -45,27 +45,6 @@ The bash script builds the FAT JARs and the native executable with GraalVM, and 
 
 CDK creates three outputs with the API Gateway endpoint URLs to use in our load tests.
 
-## AWS SnapStart enable. 
-
-Currently, CDK does not support SnapStart yet. Thus, before running the load tests you need to;
-
-- [Activate SnapStart](https://docs.aws.amazon.com/lambda/latest/dg/snapstart-activate.html)
-
-![Enable SnapStart](enable-snapstart-on-published-versions.png)
-
-
-- Publish a version with Snapstart enabled.
-
-![PublishVersion](publish-version.png)
-
-- Copy the ARN of version
-
-![AWS Lambda Version Copy ARN](aws-lambda-version-arn.png)
-
-- Update your API Gateway routes to point to the version ARN.
-
-![API Gateway Lambda Proxy](apigateway-lambda-proxy-integration.png)
-
 ## Load Tests
 
 - The application uses [Gatling](https://gatling.io/) to load test the application. Module `loadtests` contains the Gatling load tests code.
