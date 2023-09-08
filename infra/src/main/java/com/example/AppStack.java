@@ -35,6 +35,7 @@ import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstant
 import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.INDEX_GSI_2;
 
 public class AppStack extends Stack {
+    private static final String HANDLER = "io.micronaut.function.aws.proxy.MicronautLambdaHandler";
     public static final int MEMORY_SIZE = 2024;
     public static final int TIMEOUT = 20;
 
@@ -134,7 +135,9 @@ public class AppStack extends Stack {
                                             ApplicationType applicationType,
                                             String handler,
                                             Runtime runtime) {
-        Function.Builder builder =  MicronautFunction.create(applicationType,
+
+
+        Function.Builder builder =  create(applicationType,
                         runtime == Runtime.GRAALVM,
                 this,
                 id)
@@ -147,6 +150,27 @@ public class AppStack extends Stack {
                 .logRetention(RetentionDays.FIVE_DAYS);
 
         return (handler != null) ? builder.handler(handler) : builder;
+    }
+
+    public static Function.Builder create(final ApplicationType applicationType,
+                                          final boolean graalVMNative,
+                                          final software.constructs.Construct scope,
+                                          final java.lang.String id) {
+        switch (applicationType) {
+            case DEFAULT:
+                return Function.Builder.create(scope, id)
+                        .handler(HANDLER)
+                        .runtime(runtime(graalVMNative));
+            case FUNCTION:
+                return Function.Builder.create(scope, id)
+                        .runtime(runtime(graalVMNative));
+            default:
+                throw new IllegalArgumentException("Please, specify application type DEFAULT or FUNCTION");
+        }
+    }
+
+    private static software.amazon.awscdk.services.lambda.Runtime runtime(boolean graalVMNative) {
+        return graalVMNative ? software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2 : software.amazon.awscdk.services.lambda.Runtime.JAVA_17;
     }
 
     public static String functionPath(String moduleName, Runtime runtime) {
