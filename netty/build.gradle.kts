@@ -9,7 +9,6 @@ dependencies {
     implementation(projects.codeGraal)
     implementation(projects.devSecurity)
     implementation(projects.devLocalstack)
-    runtimeOnly("org.yaml:snakeyaml")
 }
 
 application {

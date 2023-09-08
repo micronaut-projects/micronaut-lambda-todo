@@ -6,10 +6,8 @@ plugins {
 dependencies {
     implementation(projects.devSecurity)
     implementation(projects.code)
-    runtimeOnly("org.yaml:snakeyaml")
     testImplementation(projects.devLocalstack)
     testImplementation("io.micronaut.security:micronaut-security-oauth2")
-    testRuntimeOnly("org.yaml:snakeyaml")
 }
 
 application {

@@ -28,7 +28,6 @@ dependencies {
   compileOnly("com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2")
   testImplementation(projects.devLocalstack)
   testImplementation("io.micronaut.aws:micronaut-function-aws-api-proxy")
-  testRuntimeOnly("org.yaml:snakeyaml")
 }
 
 tasks.withType<Test> {
