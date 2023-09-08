@@ -38,7 +38,7 @@ If you have never run CDK in your AWS account, you will have to `cdk bootstrap` 
 To ease deployment, the project contains a bash script. You can deploy via: 
 
 ```bash
-./deploy.sh
+./release.sh
 ```
 
 The bash script builds the FAT JARs and the native executable with GraalVM, and runs `cdk deploy`. It uses AWS CloudFormation to deploy the resources to your account.
