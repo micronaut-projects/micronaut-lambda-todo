@@ -23,3 +23,9 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+
+configurations.all {
+    resolutionStrategy {
+        force "software.amazon.awscdk:aws-cdk-lib:2.93.0"
+    }
+}
