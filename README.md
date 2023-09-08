@@ -116,7 +116,7 @@ restore_duration_ms + invoke_duration_ms as total_invoke_ms
 | stat
 pct(total_invoke_ms, 50) as total_invoke_ms_p50,
 pct(total_invoke_ms, 99) as total_invoke_ms_p99,
-pct(total_invoke_ms, 99.9) as total_invoke_ms_p99.9
+pct(total_invoke_ms, 99.9) as total_invoke_ms_p99.9,
 max(total_invoke_ms) as max
 ```
 
