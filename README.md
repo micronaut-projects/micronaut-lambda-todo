@@ -23,7 +23,7 @@ Code is shared between every deployment.
 
 - [AWS CLI](https://aws.amazon.com/cli/)
 - [AWS CDK](https://aws.amazon.com/cdk/)
-- Java 11
+- Java 17
 
 ## Build
 
