@@ -11,6 +11,3 @@ java {
     targetCompatibility = JavaVersion.toVersion("11")
 }
 
-dependencies {
-}
-
