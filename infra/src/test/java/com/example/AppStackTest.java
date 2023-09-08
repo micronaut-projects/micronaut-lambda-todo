@@ -17,7 +17,7 @@ class AppStackTest {
                 new File(AppStack.functionPath("function-java", Runtime.JAVA)).exists()) {
             AppStack stack = new AppStack(new App(), "TestMnTodoStack");
             Template template = Template.fromStack(stack);
-            template.hasResourceProperties("AWS::Lambda::Function", Collections.singletonMap("Handler", "io.micronaut.function.aws.proxy.MicronautLambdaHandler"));
+            template.hasResourceProperties("AWS::Lambda::Function", Collections.singletonMap("Handler", "io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction"));
         }
     }
 }
