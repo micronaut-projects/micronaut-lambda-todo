@@ -20,6 +20,7 @@ import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.logs.RetentionDays;
 import software.constructs.Construct;
 import software.constructs.IConstruct;
+import software.amazon.awscdk.services.lambda.SnapStartConf;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,7 +79,10 @@ public class AppStack extends Stack {
                                   Runtime runtime){
         Table table = createTable(tableName);
         Map<String, String> env = environmentVariables(table);
-        Function function = createAppFunction(moduleName, functionId, env, runtime).build();
+        Function.Builder functionBuilder = createAppFunction(moduleName, functionId, env, runtime);
+        Function function = runtime == Runtime.JAVA_SNAP_START ?
+            functionBuilder.snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS).build() :
+                functionBuilder.build();
         LambdaRestApi api;
         if (runtime == Runtime.JAVA_SNAP_START) {
             IConstruct defaultChild = function.getNode().getDefaultChild();
