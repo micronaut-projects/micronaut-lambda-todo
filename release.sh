@@ -4,7 +4,7 @@ EXIT_STATUS=0
 if [ $EXIT_STATUS -ne 0 ]; then
  exit $EXIT_STATUS
 fi
-./gradlew :function-native:buildNativeLambda -Pmicronaut.runtime=lambda || EXIT_STATUS=$?
+./gradlew :function-native:buildNativeLambda -Pmicronaut.runtime=lambda_provided || EXIT_STATUS=$?
 if [ $EXIT_STATUS -ne 0 ]; then
  exit $EXIT_STATUS
 fi
