@@ -51,6 +51,7 @@ public class AppStack extends Stack {
                 "mntodo-java-api",
                 "JavaApiUrl",
                 Runtime.JAVA);
+
         createGatewayLambdaTable("function-native",
                 "mntodo-native-table",
                 "mntodo-native-function",
@@ -80,18 +81,9 @@ public class AppStack extends Stack {
         Table table = createTable(tableName);
         Map<String, String> env = environmentVariables(table);
         Function.Builder functionBuilder = createAppFunction(moduleName, functionId, env, runtime);
-        Function function = runtime == Runtime.JAVA_SNAP_START ?
-            functionBuilder.snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS).build() :
-                functionBuilder.build();
+        Function function = runtime == Runtime.JAVA_SNAP_START ? functionBuilder.snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS).build() : functionBuilder.build();
         LambdaRestApi api;
         if (runtime == Runtime.JAVA_SNAP_START) {
-            IConstruct defaultChild = function.getNode().getDefaultChild();
-            if (defaultChild instanceof CfnFunction) {
-                CfnFunction cfnFunction = (CfnFunction) defaultChild;
-                cfnFunction.setSnapStart(CfnFunction.SnapStartProperty.builder()
-                        .applyOn("PublishedVersions")
-                        .build());
-            }
             Version currentVersion = function.getCurrentVersion();
             Alias prodAlias = Alias.Builder.create(this, functionId + "ProdAlias")
                     .aliasName("Prod")
