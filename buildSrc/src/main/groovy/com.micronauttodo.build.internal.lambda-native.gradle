@@ -12,6 +12,9 @@ dependencies {
 
 micronaut {
     runtime("lambda_provided")
+    nativeLambda {
+        lambdaRuntimeClassName.set("io.micronaut.function.aws.runtime.MicronautLambdaRuntime")
+    }
     testRuntime("junit5")
     processing {
         incremental(true)
