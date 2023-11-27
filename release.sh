@@ -1,5 +1,14 @@
 #!/bin/bash
 EXIT_STATUS=0
+EXIT_STATUS=0
+
+architecture="$1"
+if [ "$architecture" != "arm" ] && [ "$architecture" != "x86" ]; then
+    echo "First parameter is not equal to 'arm' or 'x86'"
+    exit 1
+fi
+export LAMBDA_ARCHITECTURE=$architecture
+
 ./gradlew test || EXIT_STATUS=$?
 if [ $EXIT_STATUS -ne 0 ]; then
  exit $EXIT_STATUS

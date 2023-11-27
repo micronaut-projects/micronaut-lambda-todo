@@ -38,6 +38,8 @@ import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstant
 public class AppStack extends Stack {
     public static final int MEMORY_SIZE = 2024;
     public static final int TIMEOUT = 20;
+    public static final String LAMBDA_ARCHITECTURE_ARM = "arm";
+    public static final String LAMBDA_ARCHITECTURE = "LAMBDA_ARCHITECTURE";
 
     public AppStack(final Construct parent, final String id) {
         this(parent, id, null);
@@ -51,7 +53,6 @@ public class AppStack extends Stack {
                 "mntodo-java-api",
                 "JavaApiUrl",
                 Runtime.JAVA);
-
         createGatewayLambdaTable("function-native",
                 "mntodo-native-table",
                 "mntodo-native-function",
@@ -81,6 +82,11 @@ public class AppStack extends Stack {
         Table table = createTable(tableName);
         Map<String, String> env = environmentVariables(table);
         Function.Builder functionBuilder = createAppFunction(moduleName, functionId, env, runtime);
+        if (runtime == Runtime.GRAALVM && LAMBDA_ARCHITECTURE_ARM.equals(System.getenv(LAMBDA_ARCHITECTURE))) {
+            functionBuilder.architecture(Architecture.ARM_64);
+        } else {
+            functionBuilder.architecture(Architecture.X86_64);
+        }
         Function function = runtime == Runtime.JAVA_SNAP_START ? functionBuilder.snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS).build() : functionBuilder.build();
         LambdaRestApi api;
         if (runtime == Runtime.JAVA_SNAP_START) {
