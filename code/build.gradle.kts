@@ -23,7 +23,7 @@ dependencies {
   implementation("io.micronaut.views:micronaut-views-thymeleaf")
   implementation("io.micronaut.security:micronaut-security-jwt")
   implementation("io.micronaut.security:micronaut-security-oauth2")
-
+  implementation("io.micronaut:micronaut-http-client-jdk")
   implementation(platform("com.amazonaws:aws-xray-recorder-sdk-bom:2.13.0"))
   compileOnly("com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2")
   testImplementation(projects.devLocalstack)
