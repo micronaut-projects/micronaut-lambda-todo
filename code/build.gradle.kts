@@ -9,6 +9,7 @@ dependencies {
   annotationProcessor("io.micronaut:micronaut-http-validation")
   implementation("io.micronaut:micronaut-jackson-databind")
   implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
+    implementation("io.micronaut.aws:micronaut-aws-apigateway")
   implementation("software.amazon.awssdk:dynamodb") {
     exclude(group = "software.amazon.awssdk", module = "apache-client")
     exclude(group = "software.amazon.awssdk", module = "netty-nio-client")
