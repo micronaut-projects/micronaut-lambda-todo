@@ -21,3 +21,7 @@ micronaut {
         annotations("com.example.*")
     }
 }
+
+tasks.named('dockerfileNative') {
+    jdkVersion.set('21')
+}
