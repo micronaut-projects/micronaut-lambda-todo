@@ -140,6 +140,7 @@ public class AppStack extends Stack {
                         runtime == Runtime.GRAALVM,
                 this,
                 id)
+                .runtime(software.amazon.awscdk.services.lambda.Runtime.JAVA_21)
                 .environment(environmentVariables)
                 .code(Code.fromAsset(functionPath(moduleName, runtime)))
                 .timeout(Duration.seconds(TIMEOUT))

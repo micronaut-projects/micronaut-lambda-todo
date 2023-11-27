@@ -41,8 +41,8 @@ tasks.withType<Test> {
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
+    sourceCompatibility = JavaVersion.toVersion("21")
+    targetCompatibility = JavaVersion.toVersion("21")
 }
 
 repositories {
