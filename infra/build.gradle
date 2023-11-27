@@ -10,7 +10,10 @@ ext {
 }
 dependencies {
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    implementation("io.micronaut.aws:micronaut-aws-cdk")
+    implementation("io.micronaut.aws:micronaut-aws-cdk") {
+        exclude(group: "software.amazon.awscdk", module: "aws-cdk-lib")
+    }
+    implementation("software.amazon.awscdk:aws-cdk-lib:2.94.0")
     testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
@@ -21,11 +24,4 @@ application {
 }
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-
-configurations.all {
-    resolutionStrategy {
-        force "software.amazon.awscdk:aws-cdk-lib:2.93.0"
-    }
 }

@@ -19,7 +19,7 @@ import software.amazon.awscdk.services.dynamodb.Table;
 import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.logs.RetentionDays;
 import software.constructs.Construct;
-import software.constructs.IConstruct;
+import software.amazon.awscdk.services.lambda.SnapStartConf;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,12 +35,10 @@ import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstant
 import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.INDEX_GSI_2;
 
 public class AppStack extends Stack {
-    private static final String HANDLER = "io.micronaut.function.aws.proxy.MicronautLambdaHandler";
     public static final int MEMORY_SIZE = 2024;
     public static final int TIMEOUT = 20;
     public static final String LAMBDA_ARCHITECTURE_ARM = "arm";
     public static final String LAMBDA_ARCHITECTURE = "LAMBDA_ARCHITECTURE";
-
 
     public AppStack(final Construct parent, final String id) {
         this(parent, id, null);
@@ -88,16 +86,9 @@ public class AppStack extends Stack {
         } else {
             functionBuilder.architecture(Architecture.X86_64);
         }
-        Function function = functionBuilder.build();
+        Function function = runtime == Runtime.JAVA_SNAP_START ? functionBuilder.snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS).build() : functionBuilder.build();
         LambdaRestApi api;
         if (runtime == Runtime.JAVA_SNAP_START) {
-            IConstruct defaultChild = function.getNode().getDefaultChild();
-            if (defaultChild instanceof CfnFunction) {
-                CfnFunction cfnFunction = (CfnFunction) defaultChild;
-                cfnFunction.setSnapStart(CfnFunction.SnapStartProperty.builder()
-                        .applyOn("PublishedVersions")
-                        .build());
-            }
             Version currentVersion = function.getCurrentVersion();
             Alias prodAlias = Alias.Builder.create(this, functionId + "ProdAlias")
                     .aliasName("Prod")
@@ -144,12 +135,10 @@ public class AppStack extends Stack {
                                             ApplicationType applicationType,
                                             String handler,
                                             Runtime runtime) {
-
-
-        Function.Builder builder =  create(applicationType,
+        Function.Builder builder =  MicronautFunction.create(applicationType,
                         runtime == Runtime.GRAALVM,
-                this,
-                id)
+                        this,
+                        id)
                 .environment(environmentVariables)
                 .code(Code.fromAsset(functionPath(moduleName, runtime)))
                 .timeout(Duration.seconds(TIMEOUT))
@@ -159,27 +148,6 @@ public class AppStack extends Stack {
                 .logRetention(RetentionDays.FIVE_DAYS);
 
         return (handler != null) ? builder.handler(handler) : builder;
-    }
-
-    public static Function.Builder create(final ApplicationType applicationType,
-                                          final boolean graalVMNative,
-                                          final software.constructs.Construct scope,
-                                          final java.lang.String id) {
-        switch (applicationType) {
-            case DEFAULT:
-                return Function.Builder.create(scope, id)
-                        .handler(HANDLER)
-                        .runtime(runtime(graalVMNative));
-            case FUNCTION:
-                return Function.Builder.create(scope, id)
-                        .runtime(runtime(graalVMNative));
-            default:
-                throw new IllegalArgumentException("Please, specify application type DEFAULT or FUNCTION");
-        }
-    }
-
-    private static software.amazon.awscdk.services.lambda.Runtime runtime(boolean graalVMNative) {
-        return graalVMNative ? software.amazon.awscdk.services.lambda.Runtime.PROVIDED_AL2 : software.amazon.awscdk.services.lambda.Runtime.JAVA_17;
     }
 
     public static String functionPath(String moduleName, Runtime runtime) {
