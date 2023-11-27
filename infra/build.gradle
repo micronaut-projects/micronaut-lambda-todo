@@ -2,23 +2,27 @@ plugins {
     id("application") 
     id("java") 
 }
+
 repositories {
     mavenCentral()
 }
-ext {
-    micronautVersion = "3.7.4"
-}
+
 dependencies {
-    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    implementation("io.micronaut.aws:micronaut-aws-cdk")
-    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
+    implementation("io.micronaut.starter:micronaut-starter-aws-cdk:$micronautVersion") {
+        exclude(group: "software.amazon.awscdk", module: "aws-cdk-lib")
+    }
+    implementation("software.amazon.awscdk:aws-cdk-lib:2.94.0")
+    testImplementation platform("io.micronaut.platform:micronaut-platform:$micronautVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-engine")
     implementation(projects.repositoriesDynamodbConstants)
 }
+
 application {
     mainClass.set("com.example.Main")
 }
+
 tasks.named('test') {
     useJUnitPlatform()
 }

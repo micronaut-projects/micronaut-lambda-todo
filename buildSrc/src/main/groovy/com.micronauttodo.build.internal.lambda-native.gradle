@@ -3,13 +3,18 @@ plugins {
     id("com.github.johnrengelman.shadow")
     id("io.micronaut.application")
 }
+
 version = "0.1"
+
 dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
-    compileOnly("com.google.code.findbugs:jsr305")
 }
+
 micronaut {
     runtime("lambda_provided")
+    nativeLambda {
+        lambdaRuntimeClassName.set("io.micronaut.function.aws.runtime.MicronautLambdaRuntime")
+    }
     testRuntime("junit5")
     processing {
         incremental(true)

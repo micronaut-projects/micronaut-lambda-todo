@@ -16,12 +16,11 @@ import software.amazon.awscdk.services.dynamodb.AttributeType;
 import software.amazon.awscdk.services.dynamodb.BillingMode;
 import software.amazon.awscdk.services.dynamodb.GlobalSecondaryIndexProps;
 import software.amazon.awscdk.services.dynamodb.Table;
-import software.amazon.awscdk.services.lambda.Architecture;
-import software.amazon.awscdk.services.lambda.Code;
-import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.Tracing;
+import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.logs.RetentionDays;
 import software.constructs.Construct;
+import software.constructs.IConstruct;
+import software.amazon.awscdk.services.lambda.SnapStartConf;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,6 +38,8 @@ import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstant
 public class AppStack extends Stack {
     public static final int MEMORY_SIZE = 2024;
     public static final int TIMEOUT = 20;
+    public static final String LAMBDA_ARCHITECTURE_ARM = "arm";
+    public static final String LAMBDA_ARCHITECTURE = "LAMBDA_ARCHITECTURE";
 
     public AppStack(final Construct parent, final String id) {
         this(parent, id, null);
@@ -80,16 +81,32 @@ public class AppStack extends Stack {
                                   Runtime runtime){
         Table table = createTable(tableName);
         Map<String, String> env = environmentVariables(table);
-        Function function = createAppFunction(moduleName, functionId, env, runtime).build();
+        Function.Builder functionBuilder = createAppFunction(moduleName, functionId, env, runtime);
+        if (runtime == Runtime.GRAALVM && LAMBDA_ARCHITECTURE_ARM.equals(System.getenv(LAMBDA_ARCHITECTURE))) {
+            functionBuilder.architecture(Architecture.ARM_64);
+        } else {
+            functionBuilder.architecture(Architecture.X86_64);
+        }
+        Function function = runtime == Runtime.JAVA_SNAP_START ? functionBuilder.snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS).build() : functionBuilder.build();
+        LambdaRestApi api;
+        if (runtime == Runtime.JAVA_SNAP_START) {
+            Version currentVersion = function.getCurrentVersion();
+            Alias prodAlias = Alias.Builder.create(this, functionId + "ProdAlias")
+                    .aliasName("Prod")
+                    .version(currentVersion)
+                    .build();
+            api = createRestApi(apiId, prodAlias);
+        } else {
+            api = createRestApi(apiId, function);
+        }
         table.grantReadWriteData(function);
-        LambdaRestApi api = createRestApi(apiId, function);
         CfnOutput.Builder.create(this, outputId)
                 .exportName(outputId)
                 .value(api.getUrl())
                 .build();
     }
 
-    private LambdaRestApi createRestApi(String id, Function function) {
+    private LambdaRestApi createRestApi(String id, IFunction function) {
         return LambdaRestApi.Builder.create(this, id)
                 .handler(function)
                 .endpointConfiguration(EndpointConfiguration.builder()
@@ -131,9 +148,6 @@ public class AppStack extends Stack {
                 .architecture(Architecture.X86_64)
                 .logRetention(RetentionDays.FIVE_DAYS);
 
-        if (runtime == Runtime.JAVA_SNAP_START) {
-            //builder = builder.snapstart(SnapStart.PUBLISHED_VERSIONS);
-        }
         return (handler != null) ? builder.handler(handler) : builder;
     }
 

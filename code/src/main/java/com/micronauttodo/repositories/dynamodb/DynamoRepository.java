@@ -23,7 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.*;
+
+import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.ATTRIBUTE_GSI_1_PK;
+import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.ATTRIBUTE_GSI_1_SK;
+import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.ATTRIBUTE_PK;
+import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.INDEX_GSI_1;
 
 public abstract class DynamoRepository {
     private static final Logger LOG = LoggerFactory.getLogger(DynamoRepository.class);
@@ -41,10 +45,13 @@ public abstract class DynamoRepository {
                 .tableName(dynamoConfiguration.getTableName())
                 .item(item)
                 .build());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("{}", itemResponse);
+        }
         if (LOG.isTraceEnabled()) {
             LOG.trace("****************************");
-            for (String k : item.keySet()) {
-                LOG.trace("{}: {}", k, item.get(k).s());
+            for (var k : item.entrySet()) {
+                LOG.trace("{}: {}", k.getKey(), k.getValue().s());
             }
             LOG.trace("****************************");
         }
@@ -162,13 +169,11 @@ public abstract class DynamoRepository {
     private <T> T fromItem(@NonNull Class<T> cls,
                            @NonNull Map<String, AttributeValue> item) {
         BeanIntrospection<T> introspection = BeanIntrospection.getIntrospection(cls);
-        Object[] arguments = new Object[introspection.getPropertyNames().length];
-        int index = 0;
+        BeanIntrospection.Builder<T> builder = introspection.builder();
         for (String propertyName : introspection.getPropertyNames()) {
-            arguments[index] = parseArgument(item, propertyName, introspection).orElse(null);
-            index++;
+            builder.with(propertyName, parseArgument(item, propertyName, introspection).orElse(null));
         }
-        return introspection.instantiate(arguments);
+        return builder.build();
     }
 
     private <T> Optional<Object> parseArgument(@NonNull Map<String, AttributeValue> item,
@@ -179,7 +184,7 @@ public abstract class DynamoRepository {
             return Optional.empty();
         }
         Optional<? extends BeanProperty<?, Object>> beanPropertyOptional = introspection.getProperty(propertyName);
-        if (!beanPropertyOptional.isPresent()) {
+        if (beanPropertyOptional.isEmpty()) {
             return Optional.empty();
         }
         BeanProperty<?, Object> beanProperty = beanPropertyOptional.get();

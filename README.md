@@ -23,7 +23,7 @@ Code is shared between every deployment.
 
 - [AWS CLI](https://aws.amazon.com/cli/)
 - [AWS CDK](https://aws.amazon.com/cdk/)
-- Java 11
+- Java 17
 
 ## Build
 
@@ -38,33 +38,12 @@ If you have never run CDK in your AWS account, you will have to `cdk bootstrap` 
 To ease deployment, the project contains a bash script. You can deploy via: 
 
 ```bash
-./deploy.sh
+./release.sh
 ```
 
 The bash script builds the FAT JARs and the native executable with GraalVM, and runs `cdk deploy`. It uses AWS CloudFormation to deploy the resources to your account.
 
 CDK creates three outputs with the API Gateway endpoint URLs to use in our load tests.
-
-## AWS SnapStart enable. 
-
-Currently, CDK does not support SnapStart yet. Thus, before running the load tests you need to;
-
-- [Activate SnapStart](https://docs.aws.amazon.com/lambda/latest/dg/snapstart-activate.html)
-
-![Enable SnapStart](enable-snapstart-on-published-versions.png)
-
-
-- Publish a version with Snapstart enabled.
-
-![PublishVersion](publish-version.png)
-
-- Copy the ARN of version
-
-![AWS Lambda Version Copy ARN](aws-lambda-version-arn.png)
-
-- Update your API Gateway routes to point to the version ARN.
-
-![API Gateway Lambda Proxy](apigateway-lambda-proxy-integration.png)
 
 ## Load Tests
 
@@ -137,7 +116,7 @@ restore_duration_ms + invoke_duration_ms as total_invoke_ms
 | stat
 pct(total_invoke_ms, 50) as total_invoke_ms_p50,
 pct(total_invoke_ms, 99) as total_invoke_ms_p99,
-pct(total_invoke_ms, 99.9) as total_invoke_ms_p99.9
+pct(total_invoke_ms, 99.9) as total_invoke_ms_p99.9,
 max(total_invoke_ms) as max
 ```
 
@@ -161,3 +140,13 @@ To destroy the CDK stack run:
 ```bash
 ./destroy.sh
 ```
+
+
+## Measurements
+
+| Runtime                | Max Cold Startup ms | 
+|:-----------------------|:--------------------|
+| Java runtime           | `8243`              |
+| Native                 | `922`               |
+| Java SnapStart         | `3625`              |
+| Java SnapStart Priming | `3493`              |

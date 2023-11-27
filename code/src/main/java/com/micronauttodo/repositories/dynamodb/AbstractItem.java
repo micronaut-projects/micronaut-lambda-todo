@@ -6,15 +6,22 @@ import io.micronaut.core.beans.BeanWrapper;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 import java.util.Map;
+
 import static com.micronauttodo.repositories.dynamodb.constants.DynamoDbConstants.*;
 
 public abstract class AbstractItem<T> implements Item {
     private final T entity;
     private final CompositePrimaryKey key;
+
     public AbstractItem(@NonNull CompositePrimaryKey key,
                         @NonNull T entity) {
         this.key = key;
         this.entity = entity;
+    }
+
+    @NonNull
+    public static AttributeValue s(@NonNull String str) {
+        return AttributeValue.builder().s(str).build();
     }
 
     @Override
@@ -33,13 +40,13 @@ public abstract class AbstractItem<T> implements Item {
         BeanWrapper<T> wrapper = BeanWrapper.getWrapper(entity);
         for (BeanProperty<T, ?> beanProperty : wrapper.getBeanProperties()) {
             if (CharSequence.class.isAssignableFrom(beanProperty.getType())) {
-                beanProperty.get(entity, CharSequence.class).ifPresent(value -> {
-                    result.put(beanProperty.getName(), s(value.toString()));
-                });
+                beanProperty.get(entity, CharSequence.class).ifPresent(value ->
+                        result.put(beanProperty.getName(), s(value.toString()))
+                );
             } else if (Number.class.isAssignableFrom(beanProperty.getType())) {
-                beanProperty.get(entity, Number.class).ifPresent(value -> {
-                    result.put(beanProperty.getName(), n(value.toString()));
-                });
+                beanProperty.get(entity, Number.class).ifPresent(value ->
+                        result.put(beanProperty.getName(), n(value.toString()))
+                );
             }
         }
         return result;
@@ -49,11 +56,6 @@ public abstract class AbstractItem<T> implements Item {
     @NonNull
     public T getEntity() {
         return entity;
-    }
-
-    @NonNull
-    public static AttributeValue s(@NonNull String str) {
-        return AttributeValue.builder().s(str).build();
     }
 
     @NonNull

@@ -2,20 +2,11 @@ package com.micronauttodo.repositories.dynamodb;
 
 import com.micronauttodo.controllers.AbstractTest;
 import com.micronauttodo.models.OAuthUser;
-import com.micronauttodo.models.Todo;
 import com.micronauttodo.models.TodoCreate;
-import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.services.TodoSaveService;
-import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.util.CollectionUtils;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

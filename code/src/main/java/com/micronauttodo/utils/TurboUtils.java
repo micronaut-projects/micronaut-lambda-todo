@@ -1,14 +1,13 @@
 package com.micronauttodo.utils;
 
 import com.micronauttodo.models.Todo;
-import com.micronauttodo.models.TodoCreate;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.views.turbo.TurboStream;
-
 import java.util.Collections;
 
 public final class TurboUtils {
-    TurboUtils() {
+
+    private TurboUtils() {
     }
 
     public static TurboStream.Builder append(Todo todo) {

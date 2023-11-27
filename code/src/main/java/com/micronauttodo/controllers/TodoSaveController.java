@@ -1,24 +1,23 @@
 package com.micronauttodo.controllers;
 
-import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
 import com.micronauttodo.models.TodoCreate;
-import com.micronauttodo.repositories.TodoRepository;
 import com.micronauttodo.services.TodoSaveService;
 import com.micronauttodo.utils.TurboUtils;
+import io.micronaut.aws.apigateway.StageResolver;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.context.ServerContextPathProvider;
 import io.micronaut.http.server.util.HttpHostResolver;
-import io.micronaut.http.uri.UriBuilder;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
@@ -26,7 +25,7 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.views.turbo.http.TurboMediaType;
 import io.swagger.v3.oas.annotations.Hidden;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Requires(beans = {TodoSaveService.class})
 @Controller
@@ -34,7 +33,7 @@ public class TodoSaveController extends AbstractController {
     private final TodoSaveService todoSaveService;
 
     public TodoSaveController(HttpHostResolver httpHostResolver,
-                              StageResolver stageResolver,
+                              StageResolver<HttpRequest<?>> stageResolver,
                               ServerContextPathProvider serverContextPathProvider,
                               TodoSaveService todoSaveService) {
         super(httpHostResolver, stageResolver, serverContextPathProvider);
@@ -48,7 +47,7 @@ public class TodoSaveController extends AbstractController {
     @ExecuteOn(TaskExecutors.IO)
     @Post("/todo")
     HttpResponse<?> save(//@NonNull @NotNull @Valid TodoCreate todo,
-                         @NonNull @NotBlank String task,
+                         @Body @NonNull @NotBlank String task,
                          @NonNull OAuthUser oAuthUser,
                          HttpRequest<?> request) {
         // Workaround due to lambda binding issue

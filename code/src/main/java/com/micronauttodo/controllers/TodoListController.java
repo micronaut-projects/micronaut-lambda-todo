@@ -1,8 +1,7 @@
 package com.micronauttodo.controllers;
 
 import com.micronauttodo.models.OAuthUser;
-import com.micronauttodo.repositories.TodoRepository;
-import com.micronauttodo.services.TodoDeleteService;
+import com.micronauttodo.repositories.dynamodb.TodoRepository;
 import com.micronauttodo.views.TodoModel;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
@@ -25,11 +24,11 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Controller
 class TodoListController {
     private final HttpHostResolver httpHostResolver;
-    private final TokenResolver tokenResolver;
+    private final TokenResolver<HttpRequest<?>> tokenResolver;
     private final TodoRepository todoRepository;
 
     public TodoListController(HttpHostResolver httpHostResolver,
-                              TokenResolver tokenResolver,
+                              TokenResolver<HttpRequest<?>> tokenResolver,
                               TodoRepository todoRepository) {
         this.httpHostResolver = httpHostResolver;
         this.tokenResolver = tokenResolver;

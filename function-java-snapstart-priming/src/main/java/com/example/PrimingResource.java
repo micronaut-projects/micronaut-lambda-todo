@@ -1,15 +1,15 @@
 package com.example;
 
 import com.micronauttodo.models.TodoCreate;
-import com.micronauttodo.repositories.TodoRepository;
+import com.micronauttodo.repositories.dynamodb.TodoRepository;
 import com.micronauttodo.services.TodoSaveService;
 import com.micronauttodo.utils.OauthUserUtils;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.crac.OrderedResource;
 import io.micronaut.security.authentication.Authentication;
-import io.micronaut.security.token.jwt.generator.AccessTokenConfiguration;
-import io.micronaut.security.token.jwt.generator.claims.ClaimsGenerator;
-import io.micronaut.security.token.jwt.generator.claims.JwtClaims;
+import io.micronaut.security.token.Claims;
+import io.micronaut.security.token.claims.ClaimsGenerator;
+import io.micronaut.security.token.generator.AccessTokenConfiguration;
 import jakarta.inject.Singleton;
 import org.crac.Context;
 import org.crac.Resource;
@@ -79,8 +79,8 @@ public class PrimingResource implements OrderedResource {
 
     private static Map<String, Object> oldClaims() {
         return Map.of(
-                JwtClaims.ISSUER, "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdemu6o0#",
-                JwtClaims.SUBJECT, ID,
+                Claims.ISSUER, "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdemu6o0#",
+                Claims.SUBJECT, ID,
                 "email", "john@email.com"
         );
     }

@@ -20,10 +20,10 @@ import io.swagger.v3.oas.annotations.Hidden;
 class UserShowController {
 
     private final HttpHostResolver hostResolver;
-    private final TokenResolver tokenResolver;
+    private final TokenResolver<HttpRequest<?>> tokenResolver;
 
     UserShowController(HttpHostResolver hostResolver,
-                       TokenResolver tokenResolver) {
+                       TokenResolver<HttpRequest<?>> tokenResolver) {
         this.hostResolver = hostResolver;
         this.tokenResolver = tokenResolver;
     }

@@ -2,6 +2,6 @@ plugins {
   id 'com.micronauttodo.build.internal.base-module'
 }
 dependencies {
-  implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+  implementation(platform("io.micronaut.platform:micronaut-platform:$micronautVersion"))
   compileOnly "software.amazon.awssdk:dynamodb"
 }

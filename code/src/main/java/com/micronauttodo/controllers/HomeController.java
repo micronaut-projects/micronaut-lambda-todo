@@ -1,7 +1,7 @@
 package com.micronauttodo.controllers;
 
-import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
+import io.micronaut.aws.apigateway.StageResolver;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -14,13 +14,12 @@ import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.views.ModelAndView;
 import io.swagger.v3.oas.annotations.Hidden;
 
-import java.net.URISyntaxException;
 import java.util.Collections;
 
 @Controller
 public class HomeController extends AbstractController {
     public HomeController(HttpHostResolver httpHostResolver,
-                          StageResolver stageResolver,
+                          StageResolver<HttpRequest<?>> stageResolver,
                           ServerContextPathProvider serverContextPathProvider) {
         super(httpHostResolver, stageResolver, serverContextPathProvider);
     }
@@ -28,7 +27,7 @@ public class HomeController extends AbstractController {
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Hidden
     @Get
-    HttpResponse<?> index(@Nullable OAuthUser oAuthUser, HttpRequest<?> request) throws URISyntaxException {
+    HttpResponse<?> index(@Nullable OAuthUser oAuthUser, HttpRequest<?> request) {
         if (oAuthUser != null) {
             return seeOther(request, uriBuilder -> uriBuilder.path("todo"));
         }
