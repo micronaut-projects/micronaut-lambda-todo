@@ -140,3 +140,12 @@ To destroy the CDK stack run:
 ```bash
 ./destroy.sh
 ```
+
+## Measurements
+
+| Runtime                | Max Cold Startup ms | 
+|:-----------------------|:--------------------|
+| Java runtime           | `6849`              |
+| Native                 | `1131`              |
+| Java SnapStart         | `2960`              |
+| Java SnapStart Priming | `2267`              |
