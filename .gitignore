@@ -7,3 +7,4 @@ build
 .idea
 /.DS_Store
 /infra/cdk.out
+cdk.context.json
