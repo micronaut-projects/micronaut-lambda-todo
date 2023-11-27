@@ -1,7 +1,7 @@
 package com.micronauttodo.controllers;
 
-import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
+import io.micronaut.aws.apigateway.StageResolver;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -19,7 +19,7 @@ import java.util.Collections;
 @Controller
 public class HomeController extends AbstractController {
     public HomeController(HttpHostResolver httpHostResolver,
-                          StageResolver stageResolver,
+                          StageResolver<HttpRequest<?>> stageResolver,
                           ServerContextPathProvider serverContextPathProvider) {
         super(httpHostResolver, stageResolver, serverContextPathProvider);
     }

@@ -1,11 +1,11 @@
 package com.micronauttodo.controllers;
 
-import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
 import com.micronauttodo.models.TodoCreate;
 import com.micronauttodo.services.TodoSaveService;
 import com.micronauttodo.utils.TurboUtils;
+import io.micronaut.aws.apigateway.StageResolver;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpRequest;
@@ -33,7 +33,7 @@ public class TodoSaveController extends AbstractController {
     private final TodoSaveService todoSaveService;
 
     public TodoSaveController(HttpHostResolver httpHostResolver,
-                              StageResolver stageResolver,
+                              StageResolver<HttpRequest<?>> stageResolver,
                               ServerContextPathProvider serverContextPathProvider,
                               TodoSaveService todoSaveService) {
         super(httpHostResolver, stageResolver, serverContextPathProvider);

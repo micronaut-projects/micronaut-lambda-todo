@@ -3,7 +3,6 @@ package com.micronauttodo.utils;
 import com.micronauttodo.models.Todo;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.views.turbo.TurboStream;
-
 import java.util.Collections;
 
 public final class TurboUtils {

@@ -1,9 +1,9 @@
 package com.micronauttodo.controllers;
 
-import com.micronauttodo.apigateway.StageResolver;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.services.TodoDeleteService;
 import com.micronauttodo.utils.TurboUtils;
+import io.micronaut.aws.apigateway.StageResolver;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpRequest;
@@ -31,7 +31,7 @@ class TodoDeleteController extends AbstractController {
     private final TodoDeleteService todoDeleteService;
 
     TodoDeleteController(HttpHostResolver httpHostResolver,
-                         StageResolver stageResolver,
+                         StageResolver<HttpRequest<?>> stageResolver,
                          ServerContextPathProvider serverContextPathProvider,
                          TodoDeleteService todoDeleteService) {
         super(httpHostResolver, stageResolver, serverContextPathProvider);

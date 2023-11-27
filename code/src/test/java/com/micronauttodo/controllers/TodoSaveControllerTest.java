@@ -1,6 +1,5 @@
 package com.micronauttodo.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.micronauttodo.models.OAuthUser;
 import com.micronauttodo.models.Todo;
 import com.micronauttodo.repositories.dynamodb.TodoRepository;
@@ -41,7 +40,6 @@ class TodoSaveControllerTest extends AbstractTest {
 
     @Test
     void testTodoSave() throws IOException {
-        ObjectMapper objectMapper = getBean(ObjectMapper.class);
         TodoRepository todoRepository = getBean(TodoRepository.class);
         String task = "Clean";
         HttpRequest<?> request = HttpRequest.POST("/todo", "task=" + task).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE);
